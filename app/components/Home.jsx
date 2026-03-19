@@ -525,7 +525,7 @@ export default function Home() {
                 <a
                   key={label}
                   href={href}
-                  className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
+                  className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {label}
                 </a>
@@ -548,7 +548,7 @@ export default function Home() {
               {/* Hamburger (mobile only) */}
               <button
                 onClick={() => setMobileOpen(true)}
-                className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-xl hover:bg-gray-100 transition-colors gap-[5px]"
+                className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-xl hover:bg-gray-100 transition-colors gap-1.25"
                 aria-label="Open menu"
               >
                 <Menu className="w-5 h-5 text-gray-600" />
@@ -683,14 +683,14 @@ export default function Home() {
                 >
                   {/* Top accent bar */}
                   {p.highlight && (
-                    <div className="h-1 w-full bg-gradient-to-r from-[#ED1C24] to-rose-400 shrink-0" />
+                    <div className="h-1 w-full bg-linear-to-r from-[#ED1C24] to-rose-400 shrink-0" />
                   )}
 
                   {/* Product image */}
                   <div
                     className={`relative flex items-center justify-center p-6 border-b border-gray-100 ${
                       p.highlight
-                        ? "bg-gradient-to-br from-red-50/40 to-white"
+                        ? "bg-linear-to-br from-red-50/40 to-white"
                         : "bg-gray-50/60"
                     }`}
                     style={{ minHeight: 160 }}
@@ -861,7 +861,7 @@ export default function Home() {
                 className="absolute inset-0 opacity-[0.07]"
                 style={{
                   backgroundImage:
-                    "radial-gradient(circle, white 1.5px, transparent 1.5px)",
+                    "radial-linear(circle, white 1.5px, transparent 1.5px)",
                   backgroundSize: "24px 24px",
                 }}
               />
