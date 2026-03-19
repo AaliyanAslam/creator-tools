@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import { Urbanist } from "next/font/google";
 import {
@@ -36,7 +35,7 @@ const urbanist = Urbanist({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
 const products = [
   {
@@ -236,28 +235,28 @@ const trust = [
   {
     icon: Shield,
     title: "100% Verified",
-    desc: "All accounts tested before delivery",
+    desc: "Tested before delivery",
     color: "text-blue-500",
     bg: "bg-blue-50",
   },
   {
     icon: Zap,
     title: "Instant Delivery",
-    desc: "Access within minutes of purchase",
+    desc: "Access within minutes",
     color: "text-yellow-500",
     bg: "bg-yellow-50",
   },
   {
     icon: MessageCircle,
     title: "WhatsApp Support",
-    desc: "Chat with us anytime for help",
+    desc: "Chat anytime for help",
     color: "text-green-500",
     bg: "bg-green-50",
   },
   {
     icon: Star,
     title: "Best Prices",
-    desc: "Lowest rates guaranteed in Pakistan",
+    desc: "Lowest rates in Pakistan",
     color: "text-red-500",
     bg: "bg-red-50",
   },
@@ -279,7 +278,6 @@ export default function Home() {
   const commRefs = useRef([]);
   const statsRef = useRef(null);
 
-  // Lock body scroll when mobile nav is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -287,23 +285,18 @@ export default function Home() {
     };
   }, [mobileOpen]);
 
-  // GSAP animations
   useEffect(() => {
     let ctx;
     (async () => {
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
-
       ctx = gsap.context(() => {
-        // Nav entrance
         gsap.fromTo(
           navRef.current,
           { y: -60, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.65, ease: "power3.out" },
         );
-
-        // Hero stagger
         gsap.fromTo(
           ".h-anim",
           { y: 28, opacity: 0 },
@@ -316,8 +309,6 @@ export default function Home() {
             delay: 0.25,
           },
         );
-
-        // Stats
         if (statsRef.current) {
           gsap.fromTo(
             [...statsRef.current.children],
@@ -332,8 +323,6 @@ export default function Home() {
             },
           );
         }
-
-        // Product cards
         cardRefs.current.forEach((el, i) => {
           if (!el) return;
           gsap.fromTo(
@@ -349,8 +338,6 @@ export default function Home() {
             },
           );
         });
-
-        // Community cards
         commRefs.current.forEach((el, i) => {
           if (!el) return;
           gsap.fromTo(
@@ -372,640 +359,602 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Creator Tools by Usama — Premium Digital Tools Pakistan</title>
-        <meta
-          name="description"
-          content="Get verified Canva Pro, Adobe CC, YouTube Premium & more at Pakistan's lowest prices."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-
+    <div
+      className={`min-h-screen bg-gray-50 text-gray-900 antialiased ${urbanist.className}`}
+    >
+      {/* ── Mobile Drawer Backdrop ───────────────────────────────────────── */}
       <div
-        className={`min-h-screen bg-gray-50 text-gray-900 antialiased ${urbanist.className}`}
-      >
-        {/* ─── Mobile Nav Overlay ─────────────────────────────────────────── */}
-        {/* Backdrop */}
-        <div
-          onClick={() => setMobileOpen(false)}
-          className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-            mobileOpen
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          }`}
-        />
+        onClick={() => setMobileOpen(false)}
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+          mobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      />
 
-        {/* Drawer — slides left → right */}
-        <aside
-          className={`fixed top-0 left-0 z-50 h-full w-72 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
-            mobileOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          {/* Drawer header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <Image
-              src="/logo/ctu1.png"
-              width={110}
-              height={40}
-              alt="Logo"
-              className="object-contain"
-            />
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-500"
-              aria-label="Close menu"
+      {/* ── Mobile Drawer ────────────────────────────────────────────────── */}
+      <aside
+        className={`fixed top-0 left-0 z-50 h-full w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+          <Image
+            src="/logo/ctu1.png"
+            width={100}
+            height={36}
+            alt="Logo"
+            className="object-contain h-8 w-auto"
+          />
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-500"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto py-3 px-3">
+          <ul className="space-y-0.5">
+            {navLinks.map(({ label, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-[#ED1C24] transition-all duration-200 group"
+                >
+                  <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#ED1C24] transition-colors shrink-0" />
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="my-4 border-t border-gray-100" />
+          <div className="px-3 space-y-3">
+            <a
+              href="tel:+923041333420"
+              className="flex items-center gap-2.5 text-sm text-gray-500 font-medium hover:text-[#ED1C24] transition-colors"
             >
-              <X className="w-4 h-4" />
-            </button>
+              <Phone className="w-4 h-4 text-[#ED1C24] shrink-0" />
+              +92304 1333420
+            </a>
+            <div className="flex items-center gap-2.5 text-sm text-gray-500 font-medium">
+              <Clock className="w-4 h-4 text-[#ED1C24] shrink-0" />
+              Mon – Fri: 8AM – 5PM
+            </div>
+          </div>
+          <div className="flex gap-2 px-3 mt-5">
+            {socialLinks.map(({ icon: Icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#ED1C24] flex items-center justify-center transition-all duration-200"
+              >
+                <Icon className="w-4 h-4 text-gray-500" />
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <div className="p-4 border-t border-gray-100">
+          <a
+            href="https://wa.me/923041333420"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1fb85a] text-white text-sm font-bold py-3 rounded-xl transition-all duration-200"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Chat on WhatsApp
+          </a>
+        </div>
+      </aside>
+
+      {/* ── Top Bar ──────────────────────────────────────────────────────── */}
+      <div className="bg-[#ED1C24] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2">
+          <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold opacity-90">
+            <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+            <span>Mon – Fri: 8AM – 5PM</span>
+          </div>
+          <a
+            href="tel:+923041333420"
+            className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold hover:opacity-80 transition-opacity"
+          >
+            <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+            <span>+92304 1333420</span>
+          </a>
+        </div>
+      </div>
+
+      {/* ── Navbar ───────────────────────────────────────────────────────── */}
+      <nav
+        ref={navRef}
+        className="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
+          <Image
+            src="/logo/ctu1.png"
+            width={110}
+            height={38}
+            alt="Creator Tools by Usama"
+            className="object-contain h-8 sm:h-9 w-auto"
+          />
+
+          <div className="hidden lg:flex items-center gap-6 xl:gap-7">
+            {navLinks.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {label}
+              </a>
+            ))}
           </div>
 
-          {/* Nav links */}
-          <nav className="flex-1 overflow-y-auto py-4 px-4">
-            <ul className="space-y-1">
-              {navLinks.map(({ label, href }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-[#ED1C24] transition-all duration-200 group"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#ED1C24] transition-colors" />
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* Divider */}
-            <div className="my-4 border-t border-gray-100" />
-
-            {/* Contact info */}
-            <div className="px-3 space-y-3">
-              <a
-                href="tel:+923041333420"
-                className="flex items-center gap-2.5 text-sm text-gray-500 font-medium hover:text-[#ED1C24] transition-colors"
-              >
-                <Phone className="w-4 h-4 text-[#ED1C24]" />
-                +92304 1333420
-              </a>
-              <div className="flex items-center gap-2.5 text-sm text-gray-500 font-medium">
-                <Clock className="w-4 h-4 text-[#ED1C24]" />
-                Mon – Fri: 8AM – 5PM
-              </div>
-            </div>
-
-            {/* Social icons */}
-            <div className="flex gap-2 px-3 mt-5">
-              {socialLinks.map(({ icon: Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#ED1C24] flex items-center justify-center transition-all duration-200"
-                >
-                  <Icon className="w-4 h-4 text-gray-500 hover:text-white" />
-                </a>
-              ))}
-            </div>
-          </nav>
-
-          {/* Drawer footer CTA */}
-          <div className="p-4 border-t border-gray-100">
+          <div className="flex items-center gap-2">
             <a
               href="https://wa.me/923041333420"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1fb85a] text-white text-sm font-bold py-3 rounded-xl transition-all duration-200"
+              className="flex items-center gap-1.5 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-bold px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-200 hover:shadow-md hover:shadow-green-200"
             >
-              <MessageCircle className="w-4 h-4" />
-              Chat on WhatsApp
+              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">WhatsApp</span>
             </a>
-          </div>
-        </aside>
-
-        {/* ─── Top Bar ────────────────────────────────────────────────────── */}
-        <div className="bg-[#ED1C24] text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-2 text-xs font-semibold">
-            <div className="flex items-center gap-1.5 opacity-90">
-              <Clock className="w-3.5 h-3.5" />
-              <span>Mon – Fri: 8AM – 5PM</span>
-            </div>
-            <a
-              href="tel:+923041333420"
-              className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="lg:hidden w-9 h-9 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors"
             >
-              <Phone className="w-3.5 h-3.5" />
-              +92304 1333420
-            </a>
+              <Menu className="w-5 h-5 text-gray-600" />
+            </button>
           </div>
         </div>
+      </nav>
 
-        {/* ─── Navbar ─────────────────────────────────────────────────────── */}
-        <nav
-          ref={navRef}
-          className="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Image
-                src="/logo/ctu1.png"
-                width={120}
-                height={40}
-                alt="Creator Tools by Usama"
-                className="object-contain"
-              />
-            </div>
-
-            {/* Desktop links */}
-            <div className="hidden lg:flex items-center gap-7">
-              {navLinks.map(({ label, href }) => (
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
+            {/* Text */}
+            <div className="flex-1 w-full max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
+              <div className="h-anim inline-flex items-center gap-2 bg-red-50 text-[#ED1C24] text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                Pakistan's #1 Digital Tools Store
+              </div>
+              <h1 className="h-anim text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 leading-[1.1] tracking-tight mb-3 sm:mb-4">
+                Premium Tools,{" "}
+                <span className="text-[#ED1C24]">Unbeatable</span> Prices
+              </h1>
+              <p className="h-anim text-sm sm:text-base text-gray-500 font-medium leading-relaxed mb-6 max-w-md mx-auto lg:mx-0">
+                Get verified Canva Pro, Adobe CC, YouTube Premium & more —
+                delivered instantly at Pakistan's lowest prices.
+              </p>
+              <div className="h-anim flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <a
-                  key={label}
-                  href={href}
-                  className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
+                  href="#products"
+                  className="inline-flex items-center justify-center gap-2 bg-[#ED1C24] hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 hover:shadow-lg hover:shadow-red-100 hover:-translate-y-0.5"
                 >
-                  {label}
+                  Shop Now <ArrowRight className="w-4 h-4" />
                 </a>
-              ))}
-            </div>
-
-            {/* Right side */}
-            <div className="flex items-center gap-2.5">
-              {/* WhatsApp button */}
-              <a
-                href="https://wa.me/923041333420"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200 hover:shadow-md hover:shadow-green-200"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">WhatsApp</span>
-              </a>
-
-              {/* Hamburger (mobile only) */}
-              <button
-                onClick={() => setMobileOpen(true)}
-                className="lg:hidden flex flex-col justify-center items-center w-9 h-9 rounded-xl hover:bg-gray-100 transition-colors gap-1.25"
-                aria-label="Open menu"
-              >
-                <Menu className="w-5 h-5 text-gray-600" />
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {/* ─── Hero ───────────────────────────────────────────────────────── */}
-        <section className="bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-            <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-              {/* Text */}
-              <div className="flex-1 max-w-xl">
-                <div className="h-anim inline-flex items-center gap-2 bg-red-50 text-[#ED1C24] text-xs font-bold px-3 py-1.5 rounded-full mb-5 uppercase tracking-widest">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Pakistan's #1 Digital Tools Store
-                </div>
-                <h1 className="h-anim text-4xl sm:text-5xl font-black text-gray-900 leading-[1.1] tracking-tight mb-4">
-                  Premium Tools,{" "}
-                  <span className="text-[#ED1C24]">Unbeatable</span> Prices
-                </h1>
-                <p className="h-anim text-base text-gray-500 font-medium leading-relaxed mb-7">
-                  Get verified Canva Pro, Adobe CC, YouTube Premium & more —
-                  delivered instantly at Pakistan's lowest prices.
-                </p>
-                <div className="h-anim flex flex-wrap gap-3">
-                  <a
-                    href="#products"
-                    className="inline-flex items-center gap-2 bg-[#ED1C24] hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 hover:shadow-lg hover:shadow-red-100 hover:-translate-y-0.5"
-                  >
-                    Shop Now <ArrowRight className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://wa.me/923041333420"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl text-sm border border-gray-200 transition-all duration-200 hover:-translate-y-0.5"
-                  >
-                    <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                    Get Help
-                  </a>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div
-                ref={statsRef}
-                className="grid grid-cols-2 gap-3 w-full max-w-xs"
-              >
-                {stats.map(({ value, label, icon: Icon }) => (
-                  <div
-                    key={label}
-                    className="group flex flex-col gap-3 p-5 bg-gray-50 hover:bg-white border border-gray-100 hover:border-gray-200 rounded-2xl transition-all duration-300 hover:shadow-md hover:shadow-gray-100"
-                  >
-                    <div className="w-9 h-9 rounded-xl bg-[#ED1C24]/8 flex items-center justify-center group-hover:bg-[#ED1C24]/12 transition-colors">
-                      <Icon className="w-4 h-4 text-[#ED1C24]" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-black text-gray-900 leading-none">
-                        {value}
-                      </p>
-                      <p className="text-xs text-gray-400 font-semibold mt-1">
-                        {label}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Trust Strip ────────────────────────────────────────────────── */}
-        <section className="bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {trust.map(({ icon: Icon, title, desc, color, bg }) => (
-                <div
-                  key={title}
-                  className="flex items-center gap-3 p-3 rounded-xl "
+                <a
+                  href="https://wa.me/923041333420"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl text-sm border border-gray-200 transition-all duration-200 hover:-translate-y-0.5"
                 >
-                  <div
-                    className={`w-8 h-8 rounded-lg  flex items-center justify-center shrink-0`}
-                  >
-                    <Icon className={`w-4 h-4 ${color}`} />
+                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  Get Help
+                </a>
+              </div>
+            </div>
+
+            {/* Stats Grid */}
+            <div
+              ref={statsRef}
+              className="grid grid-cols-2 gap-3 w-full max-w-xs sm:max-w-sm lg:max-w-xs mx-auto lg:mx-0 shrink-0"
+            >
+              {stats.map(({ value, label, icon: Icon }) => (
+                <div
+                  key={label}
+                  className="group flex flex-col gap-2.5 p-4 sm:p-5 bg-gray-50 hover:bg-white border border-gray-100 hover:border-gray-200 rounded-2xl transition-all duration-300 hover:shadow-md hover:shadow-gray-100"
+                >
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-red-50 flex items-center justify-center">
+                    <Icon className="w-4 h-4 text-[#ED1C24]" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-800">{title}</p>
-                    <p className="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 hidden sm:block">
-                      {desc}
+                    <p className="text-xl sm:text-2xl font-black text-gray-900 leading-none">
+                      {value}
+                    </p>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-semibold mt-1">
+                      {label}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ─── Products ───────────────────────────────────────────────────── */}
-        <section id="products" className="py-14">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <p className="text-[#ED1C24] text-xs font-bold uppercase tracking-widest mb-1.5">
-                  Our Products
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-black text-gray-900">
-                  Pricing & Plans
-                </h2>
-              </div>
-              <a
-                href="https://wa.me/923041333420"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-1 text-sm font-semibold text-gray-400 hover:text-[#ED1C24] transition-colors"
+      {/* ── Trust Strip ──────────────────────────────────────────────────── */}
+      <section className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            {trust.map(({ icon: Icon, title, desc, color, bg }) => (
+              <div
+                key={title}
+                className="flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-gray-50 border border-gray-100"
               >
-                Order via WhatsApp <ChevronRight className="w-4 h-4" />
-              </a>
-            </div>
-
-            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-              {products.map((p, i) => (
                 <div
-                  key={p.id}
-                  ref={(el) => (cardRefs.current[i] = el)}
-                  className={`group relative flex flex-col bg-white rounded-2xl border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-gray-200/60 ${
+                  className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center shrink-0`}
+                >
+                  <Icon className={`w-4 h-4 ${color}`} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] sm:text-xs font-bold text-gray-800 truncate">
+                    {title}
+                  </p>
+                  <p className="text-[10px] text-gray-400 font-medium leading-tight mt-0.5 hidden sm:block truncate">
+                    {desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Products ─────────────────────────────────────────────────────── */}
+      <section id="products" className="py-10 sm:py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-6 sm:mb-8">
+            <div>
+              <p className="text-[#ED1C24] text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1 sm:mb-1.5">
+                Our Products
+              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900">
+                Pricing & Plans
+              </h2>
+            </div>
+            <a
+              href="https://wa.me/923041333420"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-1 text-xs sm:text-sm font-semibold text-gray-400 hover:text-[#ED1C24] transition-colors whitespace-nowrap"
+            >
+              Order via WhatsApp <ChevronRight className="w-4 h-4 shrink-0" />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+            {products.map((p, i) => (
+              <div
+                key={p.id}
+                ref={(el) => (cardRefs.current[i] = el)}
+                className={`group relative flex flex-col bg-white rounded-2xl border overflow-hidden transition-all duration-300 hover:-translate-y-1 sm:hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-gray-200/60 ${
+                  p.highlight
+                    ? "border-[#ED1C24] shadow-lg shadow-red-100/80 ring-1 ring-[#ED1C24]/20"
+                    : "border-gray-100 shadow-sm hover:border-gray-200"
+                }`}
+              >
+                {p.highlight && (
+                  <div className="h-1 w-full bg-gradient-to-r from-[#ED1C24] to-rose-400 shrink-0" />
+                )}
+
+                {/* Image zone */}
+                <div
+                  className={`relative flex items-center justify-center px-6 py-5 sm:py-6 border-b border-gray-100 ${
                     p.highlight
-                      ? "border-[#ED1C24] shadow-lg shadow-red-100/80 ring-1 ring-[#ED1C24]/20"
-                      : "border-gray-100 shadow-sm hover:border-gray-200"
+                      ? "bg-gradient-to-br from-red-50/40 to-white"
+                      : "bg-gray-50/60"
                   }`}
                 >
-                  {/* Top accent bar */}
-                  {p.highlight && (
-                    <div className="h-1 w-full bg-linear-to-r from-[#ED1C24] to-rose-400 shrink-0" />
-                  )}
-
-                  {/* Product image */}
-                  <div
-                    className={`relative flex items-center justify-center p-6 border-b border-gray-100 ${
-                      p.highlight
-                        ? "bg-linear-to-br from-red-50/40 to-white"
-                        : "bg-gray-50/60"
-                    }`}
-                    style={{ minHeight: 160 }}
-                  >
-                    {/* Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                      <span
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${p.badgeColor}`}
-                      >
-                        {p.badge}
-                      </span>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <span className="text-[10px] font-semibold text-gray-400 bg-white border border-gray-100 px-2 py-0.5 rounded-full shadow-sm">
-                        {p.tag}
-                      </span>
-                    </div>
+                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3">
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full uppercase tracking-wide ${p.badgeColor}`}
+                    >
+                      {p.badge}
+                    </span>
+                  </div>
+                  <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3">
+                    <span className="text-[10px] font-semibold text-gray-400 bg-white border border-gray-100 px-2 py-0.5 rounded-full shadow-sm">
+                      {p.tag}
+                    </span>
+                  </div>
+                  <div className="h-24 sm:h-28 flex items-center justify-center w-full">
                     <img
                       src={p.image}
                       alt={p.title}
-                      className="max-h-28 max-w-full object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                      className="max-h-full max-w-[70%] sm:max-w-full object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
+                </div>
 
-                  {/* Card body */}
-                  <div className="flex flex-col flex-1 p-5">
-                    {/* Title */}
-                    <div className="mb-3">
-                      <h3 className="text-base font-black text-gray-900 leading-snug">
-                        {p.title}
-                      </h3>
-                      <p className="text-xs font-semibold text-gray-400 mt-0.5">
-                        {p.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                      {p.description}
+                {/* Body */}
+                <div className="flex flex-col flex-1 p-4 sm:p-5">
+                  <div className="mb-2.5 sm:mb-3">
+                    <h3 className="text-sm sm:text-base font-black text-gray-900 leading-snug">
+                      {p.title}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs font-semibold text-gray-400 mt-0.5">
+                      {p.subtitle}
                     </p>
+                  </div>
 
-                    {/* Features */}
-                    <div className="mb-4 flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mb-2">
-                        What's included
-                      </p>
-                      <ul className="grid grid-cols-2 gap-y-1.5 gap-x-2">
-                        {p.features.map((f) => (
-                          <li
-                            key={f}
-                            className="flex items-center gap-1.5 text-xs text-gray-600 font-medium"
-                          >
-                            <CheckCircle2
-                              className={`w-3.5 h-3.5 shrink-0 ${p.highlight ? "text-[#ED1C24]" : "text-emerald-500"}`}
-                            />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-3 sm:mb-4">
+                    {p.description}
+                  </p>
 
-                    {/* Divider */}
-                    <div className="border-t border-dashed border-gray-100 mb-4" />
+                  <div className="mb-3 sm:mb-4 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300 mb-2">
+                      What's included
+                    </p>
+                    <ul className="grid grid-cols-2 gap-x-2 gap-y-1.5">
+                      {p.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-center gap-1.5 text-[11px] sm:text-xs text-gray-600 font-medium"
+                        >
+                          <CheckCircle2
+                            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${p.highlight ? "text-[#ED1C24]" : "text-emerald-500"}`}
+                          />
+                          <span className="truncate">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                    {/* Price + CTA */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="flex items-baseline gap-1.5 mb-1">
-                          <span className="text-xl font-black text-gray-900">
-                            Rs. {p.price}
-                          </span>
-                          <span className="text-xs font-semibold text-gray-300 line-through">
-                            Rs. {p.originalPrice}
-                          </span>
-                        </div>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                          <CheckCircle2 className="w-3 h-3" />
-                          Save {p.savings}%
+                  <div className="border-t border-dashed border-gray-100 mb-3 sm:mb-4" />
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-1.5 mb-1 flex-wrap">
+                        <span className="text-lg sm:text-xl font-black text-gray-900">
+                          Rs. {p.price}
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-semibold text-gray-300 line-through">
+                          Rs. {p.originalPrice}
                         </span>
                       </div>
-                      <a
-                        href="https://wa.me/923041333420"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex items-center gap-1.5 text-sm font-bold px-4 py-2.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 ${
-                          p.highlight
-                            ? "bg-[#ED1C24] text-white hover:bg-red-700 shadow-md shadow-red-100"
-                            : "bg-gray-900 text-white hover:bg-gray-700 shadow-sm"
-                        }`}
-                      >
-                        <ShoppingCart className="w-3.5 h-3.5" />
-                        Buy Now
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Communities ────────────────────────────────────────────────── */}
-        <section className="py-14 bg-white border-t border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-              <div>
-                <p className="text-[#ED1C24] text-xs font-bold uppercase tracking-widest mb-1.5">
-                  Free Communities
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-black text-gray-900">
-                  Learn & Earn —{" "}
-                  <span className="text-[#ED1C24]">For Free.</span>
-                </h2>
-              </div>
-              <p className="text-sm text-gray-400 font-medium max-w-xs leading-relaxed">
-                Join our WhatsApp channels for AI courses, tools & monetization
-                strategies.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {communities.map((c, i) => {
-                const Icon = c.icon;
-                return (
-                  <div
-                    key={c.title}
-                    ref={(el) => (commRefs.current[i] = el)}
-                    className="group flex flex-col gap-4 bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:bg-white hover:border-gray-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-100/80 transition-all duration-300"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center shrink-0`}
-                      >
-                        <Icon className={`w-5 h-5 ${c.color}`} />
-                      </div>
-                      <h3 className="text-sm font-black text-gray-900 leading-tight">
-                        {c.title}
-                      </h3>
-                    </div>
-                    <p className="text-xs text-gray-400 font-medium leading-relaxed flex-1">
-                      {c.desc}
-                    </p>
-                    <a
-                      href={c.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-between bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200"
-                    >
-                      <span className="flex items-center gap-2">
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        Join Channel
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                        <CheckCircle2 className="w-3 h-3 shrink-0" />
+                        Save {p.savings}%
                       </span>
-                      <ExternalLink className="w-3 h-3 opacity-60" />
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── CTA ────────────────────────────────────────────────────────── */}
-        <section className="py-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative bg-[#ED1C24] rounded-3xl overflow-hidden py-14 px-6 sm:px-14 text-center">
-              {/* Dot grid pattern */}
-              <div
-                className="absolute inset-0 opacity-[0.07]"
-                style={{
-                  backgroundImage:
-                    "radial-linear(circle, white 1.5px, transparent 1.5px)",
-                  backgroundSize: "24px 24px",
-                }}
-              />
-              <div className="relative">
-                <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">
-                  Get Started Today
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">
-                  Ready to Get Premium Tools?
-                </h2>
-                <p className="text-white/70 text-sm font-medium mb-8 max-w-md mx-auto leading-relaxed">
-                  Message us on WhatsApp and get your subscription within
-                  minutes. Verified & Instant.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <a
-                    href="https://wa.me/923041333420"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-white text-[#ED1C24] font-black px-8 py-3.5 rounded-xl text-sm hover:bg-red-50 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto justify-center"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Order on WhatsApp
-                  </a>
-                  <a
-                    href="tel:+923041333420"
-                    className="inline-flex items-center gap-2 border-2 border-white/25 hover:border-white/60 text-white font-bold px-8 py-3.5 rounded-xl text-sm transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center"
-                  >
-                    <Phone className="w-4 h-4" />
-                    Call Now
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Footer ─────────────────────────────────────────────────────── */}
-        <footer className="bg-gray-900 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-              {/* Brand */}
-              <div className="lg:col-span-2">
-                <div className="mb-4">
-                  <Image
-                    src="/logo/ctu.png"
-                    width={120}
-                    height={40}
-                    alt="Creator Tools by Usama"
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-gray-400 text-sm leading-relaxed max-w-xs mb-5">
-                  Premium digital subscriptions at Pakistan's lowest prices.
-                  Verified accounts, instant delivery.
-                </p>
-                <div className="flex gap-2">
-                  {socialLinks.map(({ icon: Icon, label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      aria-label={label}
-                      className="w-9 h-9 rounded-xl bg-gray-800 hover:bg-[#ED1C24] flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5"
-                    >
-                      <Icon className="w-4 h-4 text-gray-400 group-hover:text-white" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quick Links */}
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">
-                  Quick Links
-                </p>
-                <ul className="space-y-2.5">
-                  {navLinks.map(({ label, href }) => (
-                    <li key={label}>
-                      <a
-                        href={href}
-                        className="text-sm text-gray-400 hover:text-white transition-colors font-medium flex items-center gap-1.5 group"
-                      >
-                        <ChevronRight className="w-3 h-3 text-[#ED1C24] opacity-0 group-hover:opacity-100 -ml-1 transition-opacity" />
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Contact */}
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">
-                  Contact
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-center gap-2.5 text-sm text-gray-400 font-medium">
-                    <Phone className="w-4 h-4 text-[#ED1C24] shrink-0" />
-                    +92304 1333420
-                  </li>
-                  <li className="flex items-center gap-2.5 text-sm text-gray-400 font-medium">
-                    <Clock className="w-4 h-4 text-[#ED1C24] shrink-0" />
-                    Mon – Fri: 8AM – 5PM
-                  </li>
-                  <li className="pt-1">
+                    </div>
                     <a
                       href="https://wa.me/923041333420"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200"
+                      className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 shrink-0 ${
+                        p.highlight
+                          ? "bg-[#ED1C24] text-white hover:bg-red-700 shadow-md shadow-red-100"
+                          : "bg-gray-900 text-white hover:bg-gray-700 shadow-sm"
+                      }`}
                     >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      Chat on WhatsApp
+                      <ShoppingCart className="w-3.5 h-3.5 shrink-0" />
+                      Buy Now
                     </a>
-                  </li>
-                </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Communities ──────────────────────────────────────────────────── */}
+      <section className="py-10 sm:py-14 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div>
+              <p className="text-[#ED1C24] text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1 sm:mb-1.5">
+                Free Communities
+              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900">
+                Learn & Earn — <span className="text-[#ED1C24]">For Free.</span>
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-400 font-medium max-w-xs leading-relaxed">
+              Join our WhatsApp channels for AI courses, tools & monetization
+              strategies.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {communities.map((c, i) => {
+              const Icon = c.icon;
+              return (
+                <div
+                  key={c.title}
+                  ref={(el) => (commRefs.current[i] = el)}
+                  className="group flex flex-col gap-3 sm:gap-4 bg-gray-50 border border-gray-100 rounded-2xl p-4 sm:p-5 hover:bg-white hover:border-gray-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-100/80 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${c.bg} flex items-center justify-center shrink-0`}
+                    >
+                      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${c.color}`} />
+                    </div>
+                    <h3 className="text-xs sm:text-sm font-black text-gray-900 leading-tight">
+                      {c.title}
+                    </h3>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-gray-400 font-medium leading-relaxed flex-1">
+                    {c.desc}
+                  </p>
+                  <a
+                    href={c.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-between bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200"
+                  >
+                    <span className="flex items-center gap-2">
+                      <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                      Join Channel
+                    </span>
+                    <ExternalLink className="w-3 h-3 opacity-60 shrink-0" />
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ──────────────────────────────────────────────────────────── */}
+      <section className="py-8 sm:py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative bg-[#ED1C24] rounded-2xl sm:rounded-3xl overflow-hidden py-10 sm:py-14 px-5 sm:px-10 lg:px-14 text-center">
+            <div
+              className="absolute inset-0 opacity-[0.07]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, white 1.5px, transparent 1.5px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+            <div className="relative">
+              <p className="text-white/60 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-2 sm:mb-3">
+                Get Started Today
+              </p>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 sm:mb-3 leading-tight">
+                Ready to Get Premium Tools?
+              </h2>
+              <p className="text-white/70 text-xs sm:text-sm font-medium mb-6 sm:mb-8 max-w-md mx-auto leading-relaxed">
+                Message us on WhatsApp and get your subscription within minutes.
+                Verified & Instant.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href="https://wa.me/923041333420"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-[#ED1C24] font-black px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm hover:bg-red-50 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto justify-center"
+                >
+                  <MessageCircle className="w-4 h-4 shrink-0" />
+                  Order on WhatsApp
+                </a>
+                <a
+                  href="tel:+923041333420"
+                  className="inline-flex items-center gap-2 border-2 border-white/25 hover:border-white/60 text-white font-bold px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center"
+                >
+                  <Phone className="w-4 h-4 shrink-0" />
+                  Call Now
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <footer className="bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 sm:mb-10">
+            <div className="sm:col-span-2 lg:col-span-2">
+              <div className="mb-4">
+                <Image
+                  src="/logo/ctu.png"
+                  width={110}
+                  height={38}
+                  alt="Creator Tools by Usama"
+                  className="object-contain h-8 w-auto"
+                />
+              </div>
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed max-w-xs mb-5">
+                Premium digital subscriptions at Pakistan's lowest prices.
+                Verified accounts, instant delivery.
+              </p>
+              <div className="flex gap-2">
+                {socialLinks.map(({ icon: Icon, label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className="w-9 h-9 rounded-xl bg-gray-800 hover:bg-[#ED1C24] flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5"
+                  >
+                    <Icon className="w-4 h-4 text-gray-400" />
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Bottom bar */}
-            <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-              <p className="text-gray-600 text-xs font-medium">
-                © {new Date().getFullYear()} Creator Tools by Usama. All rights
-                reserved.
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 sm:mb-4">
+                Quick Links
               </p>
-              <p className="text-gray-700 text-xs font-medium">
-                Made with ❤️ in Pakistan
+              <ul className="space-y-2 sm:space-y-2.5">
+                {navLinks.map(({ label, href }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors font-medium flex items-center gap-1.5 group"
+                    >
+                      <ChevronRight className="w-3 h-3 text-[#ED1C24] opacity-0 group-hover:opacity-100 -ml-1 transition-opacity shrink-0" />
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3 sm:mb-4">
+                Contact
               </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-400 font-medium">
+                  <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ED1C24] shrink-0" />
+                  +92304 1333420
+                </li>
+                <li className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-400 font-medium">
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ED1C24] shrink-0" />
+                  Mon – Fri: 8AM – 5PM
+                </li>
+                <li className="pt-1">
+                  <a
+                    href="https://wa.me/923041333420"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                    Chat on WhatsApp
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
-        </footer>
 
-        {/* ─── Floating WhatsApp FAB ───────────────────────────────────────── */}
-        <a
-          href="https://wa.me/923041333420"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#1fb85a] rounded-2xl shadow-xl shadow-green-400/30 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1"
-          style={{ width: 52, height: 52 }}
-          title="Chat on WhatsApp"
-        >
-          <MessageCircle className="w-6 h-6 text-white" fill="white" />
-        </a>
-      </div>
-    </>
+          <div className="border-t border-gray-800 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-gray-600 text-[11px] sm:text-xs font-medium text-center sm:text-left">
+              © {new Date().getFullYear()} Creator Tools by Usama. All rights
+              reserved.
+            </p>
+            <p className="text-gray-700 text-[11px] sm:text-xs font-medium">
+              Made with ❤️ in Pakistan
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* ── Floating WhatsApp FAB ────────────────────────────────────────── */}
+      <a
+        href="https://wa.me/923041333420"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] hover:bg-[#1fb85a] rounded-2xl shadow-xl shadow-green-400/30 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1"
+        style={{ width: 48, height: 48 }}
+        title="Chat on WhatsApp"
+      >
+        <MessageCircle
+          className="w-5 h-5 sm:w-6 sm:h-6 text-white"
+          fill="white"
+        />
+      </a>
+    </div>
   );
 }
