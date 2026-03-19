@@ -629,10 +629,10 @@ export default function Home() {
               {trust.map(({ icon: Icon, title, desc, color, bg }) => (
                 <div
                   key={title}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-xl "
                 >
                   <div
-                    className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center shrink-0`}
+                    className={`w-8 h-8 rounded-lg  flex items-center justify-center shrink-0`}
                   >
                     <Icon className={`w-4 h-4 ${color}`} />
                   </div>
