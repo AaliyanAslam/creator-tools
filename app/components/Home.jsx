@@ -374,7 +374,7 @@ export default function Home() {
 
       {/* ── Mobile Drawer ────────────────────────────────────────────────── */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed top-0 left-0 z-50 h-full w-70 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -487,7 +487,7 @@ export default function Home() {
               <a
                 key={label}
                 href={href}
-                className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
+                className="relative text-sm font-semibold text-gray-500 hover:text-[#ED1C24] transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-[#ED1C24] after:rounded-full after:transition-all after:duration-300 hover:after:w-full"
               >
                 {label}
               </a>
@@ -641,14 +641,14 @@ export default function Home() {
                 }`}
               >
                 {p.highlight && (
-                  <div className="h-1 w-full bg-gradient-to-r from-[#ED1C24] to-rose-400 shrink-0" />
+                  <div className="h-1 w-full bg-linear-to-r from-[#ED1C24] to-rose-400 shrink-0" />
                 )}
 
                 {/* Image zone */}
                 <div
                   className={`relative flex items-center justify-center px-6 py-5 sm:py-6 border-b border-gray-100 ${
                     p.highlight
-                      ? "bg-gradient-to-br from-red-50/40 to-white"
+                      ? "bg-linear-to-br from-red-50/40 to-white"
                       : "bg-gray-50/60"
                   }`}
                 >
