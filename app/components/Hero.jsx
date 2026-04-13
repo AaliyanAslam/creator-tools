@@ -122,7 +122,7 @@ export default function HeroCentered() {
               Pakistan's #1 Digital Store
             </div>
 
-            <h1 className="h-anim-top text-[2.5rem] sm:text-6xl lg:text-6xl font-black text-gray-900 leading-none tracking-tighter mb-4">
+            <h1 className="h-anim-top text-[2.3rem] sm:text-6xl lg:text-6xl font-black text-gray-900 leading-none tracking-tighter mb-4">
               Get Premium Tools at <br />
               <span className="text-[#ED1C24]">Unbeatable</span> Prices
             </h1>
