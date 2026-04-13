@@ -112,7 +112,7 @@ export default function HeroCentered() {
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/grid.svg')] bg-center -z-20" />
 
       {/* ── Main Hero Section ───────────────────────────────────────────── */}
-      <section className="relative pt-16 pb-20 lg:pt-8 lg:pb-12">
+      <section className="relative pt-8 pb-20 lg:pt-8 lg:pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
           
           {/* TOP CONTENT */}
@@ -122,12 +122,12 @@ export default function HeroCentered() {
               Pakistan's #1 Digital Store
             </div>
 
-            <h1 className="h-anim-top text-5xl sm:text-6xl lg:text-6xl font-black text-gray-900 leading-none tracking-tighter mb-4">
+            <h1 className="h-anim-top text-[2.5rem] sm:text-6xl lg:text-6xl font-black text-gray-900 leading-none tracking-tighter mb-4">
               Get Premium Tools at <br />
               <span className="text-[#ED1C24]">Unbeatable</span> Prices
             </h1>
 
-            <p className="h-anim-top text-lg sm:text-lg text-gray-600 font-medium max-w-2xl mx-auto">
+            <p className="h-anim-top text-[1rem] sm:text-lg text-gray-600 font-medium max-w-2xl mx-auto">
               Verified Canva Pro, Adobe CC, YouTube Premium & more — delivered
               instantly to your inbox in minutes. Stop paying full price.
             </p>
@@ -136,12 +136,12 @@ export default function HeroCentered() {
           {/* CENTER IMAGE */}
           <div
             ref={imageRef}
-            className="relative w-full max-w-5xl mx-auto mb-16 lg:mb-6 z-0"
+            className="relative w-full max-w-5xl mx-auto mb-8 lg:mb-6 z-0"
           >
             <div className="relative group">
               <div className="absolute -inset-10 bg-linear-to-r from-red-100 via-orange-50 to-red-100 rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-70 transition duration-1000" />
 
-              <div className="relative rounded-3xl sm:rounded overflow-hidden shadow-2xl border-4 border-white bg-white">
+              <div className="relative rounded-xl sm:rounded overflow-hidden shadow-2xl border-4 border-white bg-white">
                 <Image
                   src="/hbg1.png"
                   alt="Premium Digital Tools Showcase"
@@ -168,7 +168,7 @@ export default function HeroCentered() {
                 href="https://wa.me/923041333420"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-gray-50 text-gray-900 font-bold px-10 py-4 rounded-sm text-lg border-2 border-gray-100 transition-all duration-300 active:scale-95"
+                className="inline-flex  items-center justify-center gap-2.5 bg-white hover:bg-gray-50 text-gray-900 font-bold px-10 py-4 rounded-sm text-lg border-2 border-[#b3e8c6] transition-all duration-300 active:scale-95"
               >
                 <MessageCircle className="w-5 h-5 text-[#25D366] fill-[#25D366]/10" />
                 WhatsApp Support
@@ -209,13 +209,13 @@ export default function HeroCentered() {
       </section>
 
       {/* TRUST STRIP */}
-      <section className="">
+      <section className="hidden lg:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {trust.map(({ icon: Icon, title, desc, color, bg }, index) => (
               <div
                 key={index}
-                className="flex items-center gap-4 group cursor-default bg-white p-5 rounded border border-gray-100 shadow-sm transition-all hover:shadow-md"
+                className="flex items-center gap-4 group cursor-default bg-white p-5 rounded border border-gray-100  transition-all hover:shadow-md"
               >
                 <div className={`w-14 h-14 rounded-xl ${bg} flex items-center justify-center shrink-0 transition-transform group-hover:scale-110`}>
                   <Icon className={`w-7 h-7 ${color}`} />
