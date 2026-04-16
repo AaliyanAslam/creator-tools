@@ -4,9 +4,7 @@ import Hero from "./components/Hero";
 import LearnNEarn from "./components/LearnNEarn";
 import Navbar from "./components/Navbar";
 import OurProducts from "./components/OurProducts";
-import { Urbanist } from "next/font/google";
-
-const urbanist = Urbanist({ subsets: ["latin"], variable: "--font-urbanist" });
+import { urbanist } from "./fonts";
 
 export const metadata = {
   title: "Creator Tools by Usama - Premium Digital Subscriptions in Pakistan",

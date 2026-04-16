@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Menu, X, MessageCircle, Phone, Clock , ChevronRight } from "lucide-react";
 
 const navLinks = [
-  { label: "Home", href: "#" },
+  { label: "Home", href: "/" },
   { label: "Pricing & Plans", href: "#products" },
   { label: "Contact Us", href: "tel:+923041333420" },
   { label: "FAQs", href: "#" },
