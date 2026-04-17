@@ -194,11 +194,11 @@ export default function HeroCentered() {
           <div className="max-w-3xl z-10 mb-6">
             {/* Timer Badge */}
             <div className="h-anim-top mb-4 flex justify-center">
-              <div className="inline-flex items-center gap-3 bg-white border border-red-200 shadow-sm rounded-2xl px-2 lg:px-7 py-3.5 text-sm font-semibold text-gray-800">
+              <div className="inline-flex items-center gap-3 bg-white border border-red-200 shadow-sm rounded-2xl px-2 lg:px-7 py-3.5 text-[0.7rem] md:text-[1rem] font-semibold text-gray-800">
                 <span className="text-[#ED1C24] flex items-center gap-1">
                   <span>⏰</span> Limited Offer Ends In
                 </span>
-                <div className="flex gap-5 text-xl font-black tabular-nums text-[#ED1C24]">
+                <div className="flex gap-5 text-[1rem] md:text-[1rem] font-black tabular-nums text-[#ED1C24]">
                   <span>
                     {String(timeLeft.days).padStart(2, "0")}
                     <span className="text-xs font-normal text-gray-500 ml-0.5">
@@ -245,7 +245,7 @@ export default function HeroCentered() {
           >
             <div className="relative group">
               <div className="absolute -inset-12 bg-linear-to-r from-red-100 via-orange-50 to-red-100 rounded-[3rem] blur-3xl opacity-40 group-hover:opacity-60 transition-opacity duration-1000" />
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl  bg-white">
                 <a
                   href="https://wa.me/923041333420"
                   target="_blank"
