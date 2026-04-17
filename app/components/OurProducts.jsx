@@ -229,10 +229,10 @@ export default function OurProducts() {
 
                     <div className="border-t border-dashed border-gray-100 mb-3 sm:mb-4" />
 
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center justify-between lg:gap-3">
                       <div className="min-w-0">
                         <div className="flex items-baseline gap-1.5 mb-1 flex-wrap">
-                          <span className="text-lg sm:text-xl font-black text-gray-900">
+                          <span className="text-base sm:text-xl font-black text-gray-900">
                             Rs. {p.price}
                           </span>
                           {p.originalPrice && (
@@ -243,7 +243,7 @@ export default function OurProducts() {
                         </div>
 
                         {savings > 0 && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-[0.4rem] lg:text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
                             <CheckCircle2 className="w-3 h-3 shrink-0" />
                             Save {savings}%
                           </span>

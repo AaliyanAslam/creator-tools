@@ -1,3 +1,4 @@
+import ClientWrapper from "./components/ClientWrapper";
 import "./globals.css";
 
 export const metadata = {
@@ -26,7 +27,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ClientWrapper>{children}</ClientWrapper>
+      </body>
     </html>
   );
 }

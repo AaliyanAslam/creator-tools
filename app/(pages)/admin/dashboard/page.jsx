@@ -38,6 +38,7 @@ import {
   ToggleLeft,
   ToggleRight,
   ImageOff,
+  PhoneCall,
 } from "lucide-react";
 import { urbanist } from "@/app/fonts";
 
@@ -45,16 +46,17 @@ const ACCENT = "#ED1C24";
 const SIDEBAR_WIDTH = 260;
 
 export default function AdminDashboard() {
-  const [isLoggedIn, setIsLoggedIn]     = useState(false);
+  const [isLoggedIn, setIsLoggedIn]       = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab]       = useState("dashboard");
-  const [products, setProducts]         = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [btnLoading, setBtnLoading]     = useState(false);
-  const [editingId, setEditingId]       = useState(null);
-  const [searchQuery, setSearchQuery]   = useState("");
-  const [toast, setToast]               = useState({ show: false, message: "", type: "success" });
-  const [countdownEnd, setCountdownEnd] = useState("");
+  const [activeTab, setActiveTab]         = useState("dashboard");
+  const [products, setProducts]           = useState([]);
+  const [leads, setLeads]                 = useState([]);           // ← NEW
+  const [loading, setLoading]             = useState(true);
+  const [btnLoading, setBtnLoading]       = useState(false);
+  const [editingId, setEditingId]         = useState(null);
+  const [searchQuery, setSearchQuery]     = useState("");
+  const [toast, setToast]                 = useState({ show: false, message: "", type: "success" });
+  const [countdownEnd, setCountdownEnd]   = useState("");
 
   const emptyForm = {
     title: "", subtitle: "", description: "", features: "",
@@ -62,13 +64,12 @@ export default function AdminDashboard() {
   };
   const [form, setForm] = useState(emptyForm);
 
-  const mainContentRef = useRef(null);
-  const sidebarRef     = useRef(null);
-  const backdropRef    = useRef(null);
-  const loginRef       = useRef(null);
-  const toastTimerRef  = useRef(null);
-  // Track whether GSAP has set the sidebar initial state
-  const sidebarInitRef = useRef(false);
+  const mainContentRef  = useRef(null);
+  const sidebarRef      = useRef(null);
+  const backdropRef     = useRef(null);
+  const loginRef        = useRef(null);
+  const toastTimerRef   = useRef(null);
+  const sidebarInitRef  = useRef(false);
 
   // ── Auth ──────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -76,112 +77,69 @@ export default function AdminDashboard() {
     if (auth === "true") {
       setIsLoggedIn(true);
       fetchProducts();
+      fetchLeads();   // ← fetch leads on page-load if already logged in
     } else {
       setLoading(false);
     }
   }, []);
 
-  // ── Sidebar initial state via GSAP (runs before paint to avoid flash) ─────
-  // We let GSAP own ALL transform state on the sidebar and backdrop.
-  // Tailwind's -translate-x-full is REMOVED from the sidebar className.
-  // Instead we use gsap.set() here so GSAP controls the initial position.
+  // ── Sidebar initial state via GSAP ────────────────────────────────────────
   useLayoutEffect(() => {
     if (!sidebarRef.current || !backdropRef.current) return;
-
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-
-    // Sidebar: visible on desktop, off-screen on mobile
     gsap.set(sidebarRef.current, { x: isDesktop ? 0 : -SIDEBAR_WIDTH });
-
-    // Backdrop: always hidden initially
     gsap.set(backdropRef.current, { opacity: 0, pointerEvents: "none" });
-
     sidebarInitRef.current = true;
-  }, [isLoggedIn]); // re-run when dashboard mounts after login
+  }, [isLoggedIn]);
 
-  // ── Handle window resize: snap sidebar position without animation ─────────
+  // ── Handle window resize ──────────────────────────────────────────────────
   useEffect(() => {
     const onResize = () => {
       if (!sidebarRef.current) return;
       const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
       if (isDesktop) {
-        // Always show sidebar on desktop, kill any mobile animation
         gsap.set(sidebarRef.current, { x: 0 });
         gsap.set(backdropRef.current, { opacity: 0, pointerEvents: "none" });
         setIsSidebarOpen(false);
       } else if (!isSidebarOpen) {
-        // Hide sidebar off-screen on mobile if not open
         gsap.set(sidebarRef.current, { x: -SIDEBAR_WIDTH });
       }
     };
-
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [isSidebarOpen]);
 
-  // ── Sidebar open/close animation (mobile only) ────────────────────────────
-  // This effect ONLY runs the open/close animation; initial state is
-  // handled by useLayoutEffect above, so there's no conflict.
+  // ── Sidebar open/close animation ──────────────────────────────────────────
   useEffect(() => {
     if (!sidebarRef.current || !backdropRef.current) return;
-    if (!sidebarInitRef.current) return; // wait for initial set
-
+    if (!sidebarInitRef.current) return;
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-    if (isDesktop) return; // desktop sidebar is always visible via gsap.set
+    if (isDesktop) return;
 
     if (isSidebarOpen) {
-      // Slide in
-      gsap.to(sidebarRef.current, {
-        x: 0,
-        duration: 0.32,
-        ease: "power3.out",
-        overwrite: true,
-      });
-      // Fade backdrop in
-      gsap.to(backdropRef.current, {
-        opacity: 1,
-        duration: 0.28,
-        ease: "power2.out",
-        pointerEvents: "auto",
-        overwrite: true,
-      });
+      gsap.to(sidebarRef.current,  { x: 0,              duration: 0.32, ease: "power3.out", overwrite: true });
+      gsap.to(backdropRef.current, { opacity: 1,         duration: 0.28, ease: "power2.out", pointerEvents: "auto",  overwrite: true });
     } else {
-      // Slide out
-      gsap.to(sidebarRef.current, {
-        x: -SIDEBAR_WIDTH,
-        duration: 0.28,
-        ease: "power3.in",
-        overwrite: true,
-      });
-      // Fade backdrop out
-      gsap.to(backdropRef.current, {
-        opacity: 0,
-        duration: 0.22,
-        ease: "power2.in",
-        pointerEvents: "none",
-        overwrite: true,
-      });
+      gsap.to(sidebarRef.current,  { x: -SIDEBAR_WIDTH, duration: 0.28, ease: "power3.in",  overwrite: true });
+      gsap.to(backdropRef.current, { opacity: 0,         duration: 0.22, ease: "power2.in",  pointerEvents: "none", overwrite: true });
     }
   }, [isSidebarOpen]);
 
   // ── Scroll lock ───────────────────────────────────────────────────────────
-  // Uses a class on <html> rather than body.style to avoid conflicts.
   useEffect(() => {
     const html = document.documentElement;
     if (isSidebarOpen) {
-      // Store current scroll position to prevent jump
       const scrollY = window.scrollY;
-      html.style.overflow  = "hidden";
-      html.style.position  = "fixed";
-      html.style.top       = `-${scrollY}px`;
-      html.style.width     = "100%";
+      html.style.overflow = "hidden";
+      html.style.position = "fixed";
+      html.style.top      = `-${scrollY}px`;
+      html.style.width    = "100%";
     } else {
       const scrollY = html.style.top ? parseInt(html.style.top || "0") * -1 : 0;
-      html.style.overflow  = "";
-      html.style.position  = "";
-      html.style.top       = "";
-      html.style.width     = "";
-      // Restore scroll position
+      html.style.overflow = "";
+      html.style.position = "";
+      html.style.top      = "";
+      html.style.width    = "";
       if (scrollY) window.scrollTo(0, scrollY);
     }
     return () => {
@@ -195,18 +153,14 @@ export default function AdminDashboard() {
   // ── Login GSAP animation ──────────────────────────────────────────────────
   useGSAP(() => {
     if (!isLoggedIn && loginRef.current) {
-      gsap.from(loginRef.current, {
-        scale: 0.92, opacity: 0, duration: 0.7, ease: "back.out(1.7)",
-      });
+      gsap.from(loginRef.current, { scale: 0.92, opacity: 0, duration: 0.7, ease: "back.out(1.7)" });
     }
   }, [isLoggedIn]);
 
-  // ── Header entrance animation (runs once after login) ─────────────────────
+  // ── Header entrance animation ─────────────────────────────────────────────
   useGSAP(() => {
     if (!isLoggedIn) return;
-    gsap.from(".header-anim", {
-      y: -20, opacity: 0, duration: 0.6, delay: 0.15, ease: "power3.out",
-    });
+    gsap.from(".header-anim", { y: -20, opacity: 0, duration: 0.6, delay: 0.15, ease: "power3.out" });
   }, [isLoggedIn]);
 
   // ── Page-tab transition ───────────────────────────────────────────────────
@@ -234,7 +188,7 @@ export default function AdminDashboard() {
     }
   }, [loading, activeTab]);
 
-  // ── Firestore helpers ─────────────────────────────────────────────────────
+  // ── Firestore: products ───────────────────────────────────────────────────
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -242,13 +196,33 @@ export default function AdminDashboard() {
       const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
       setProducts(data);
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error("Fetch products error:", err);
       showToast("Failed to fetch products", "error");
     } finally {
       setLoading(false);
     }
   };
 
+  // ── Firestore: leads ──────────────────────────────────────────────────────
+  const fetchLeads = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "leads"));
+      const data = snapshot.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        // Sort by latest first (descending createdAt)
+        .sort((a, b) => {
+          const aTime = a.createdAt?.seconds ?? 0;
+          const bTime = b.createdAt?.seconds ?? 0;
+          return bTime - aTime;
+        });
+      setLeads(data);
+    } catch (err) {
+      console.error("Fetch leads error:", err);
+      showToast("Failed to fetch leads", "error");
+    }
+  };
+
+  // ── Auth handlers ─────────────────────────────────────────────────────────
   const handleLogin = (e) => {
     e.preventDefault();
     const user = e.target.username.value;
@@ -263,6 +237,7 @@ export default function AdminDashboard() {
           localStorage.setItem("isAdminLoggedIn", "true");
           setIsLoggedIn(true);
           fetchProducts();
+          fetchLeads();   // ← also fetch leads after manual login
         },
       });
     } else {
@@ -276,8 +251,10 @@ export default function AdminDashboard() {
     localStorage.removeItem("isAdminLoggedIn");
     setIsLoggedIn(false);
     setProducts([]);
+    setLeads([]);
   };
 
+  // ── Product actions ───────────────────────────────────────────────────────
   const handleToggleActive = async (id, currentStatus) => {
     const newStatus = !currentStatus;
     setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isActive: newStatus } : p)));
@@ -361,7 +338,9 @@ export default function AdminDashboard() {
     );
   }, []);
 
-  const resetForm = () => { setForm(emptyForm); setEditingId(null); };
+  const resetForm   = () => { setForm(emptyForm); setEditingId(null); };
+  const openSidebar  = () => setIsSidebarOpen(true);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleEdit = (product) => {
     const featuresStr = Array.isArray(product.features)
@@ -373,6 +352,12 @@ export default function AdminDashboard() {
     closeSidebar();
   };
 
+  const navigate = (tab) => {
+    if (tab !== "add-product") resetForm();
+    setActiveTab(tab);
+    closeSidebar();
+  };
+
   const savings =
     form.originalPrice && form.price
       ? Math.round(
@@ -381,27 +366,20 @@ export default function AdminDashboard() {
         )
       : 0;
 
-  // ── Navigation helpers ────────────────────────────────────────────────────
-  const openSidebar  = () => setIsSidebarOpen(true);
-  const closeSidebar = () => setIsSidebarOpen(false);
-
-  const navigate = (tab) => {
-    if (tab !== "add-product") resetForm();
-    setActiveTab(tab);
-    closeSidebar(); // always close on mobile after navigation
-  };
-
   const filtered = products.filter(
     (p) =>
       p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.subtitle?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // ── Derived stats ─────────────────────────────────────────────────────────
+  const activeProductsCount = products.filter((p) => p.isActive).length;
+
   // ── Login Screen ──────────────────────────────────────────────────────────
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(237,28,36,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(237,28,36,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(237,28,36,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(237,28,36,0.03)_1px,transparent_1px)] bg-size-[40px_40px]" />
         <div
           ref={loginRef}
           className="relative w-full max-w-md bg-white p-8 md:p-10 rounded-2xl border border-slate-100 shadow-2xl shadow-slate-200/60"
@@ -436,31 +414,18 @@ export default function AdminDashboard() {
   return (
     <div className={`flex min-h-screen bg-[#F8F8FA] text-slate-900 overflow-x-hidden ${urbanist.className}`}>
 
-      {/*
-        ── Backdrop ──────────────────────────────────────────────────────────
-        Opacity and pointer-events are 100% GSAP-controlled via gsap.set /
-        gsap.to. We do NOT set opacity/pointer-events via Tailwind here.
-        aria-hidden keeps it out of the a11y tree.
-      */}
+      {/* Backdrop */}
       <div
         ref={backdropRef}
         onClick={closeSidebar}
         aria-hidden="true"
         className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
-        // Intentionally no Tailwind opacity or pointer-events classes here
       />
 
-      {/*
-        ── Sidebar ───────────────────────────────────────────────────────────
-        KEY FIX: -translate-x-full and lg:translate-x-0 Tailwind classes are
-        REMOVED. All x-translation is owned entirely by GSAP (set in
-        useLayoutEffect + animated in useEffect). Mixing Tailwind transforms
-        with GSAP transforms on the same element causes the flicker/conflict.
-      */}
+      {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className="fixed inset-y-0 left-0 w-[260px] bg-white border-r border-slate-100/80 z-50 flex flex-col shadow-xl shadow-slate-200/30"
-        // No transform class — GSAP owns this
+        className="fixed inset-y-0 left-0 w-65 bg-white border-r border-slate-100/80 z-50 flex flex-col shadow-xl shadow-slate-200/30"
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <img src="/logo/ctu1.png" alt="Logo" className="h-8 w-auto object-contain" />
@@ -481,7 +446,7 @@ export default function AdminDashboard() {
           <NavLink icon={<PlusCircle size={17} />}      label="Add Product"    active={activeTab === "add-product"}   onClick={() => { resetForm(); navigate("add-product"); }} />
           <NavLink icon={<Package size={17} />}         label="Catalog"        active={activeTab === "all-products"}  count={products.length} onClick={() => navigate("all-products")} />
           <NavLink icon={<Clock size={17} />}           label="Timer Settings" active={activeTab === "settings"}      onClick={() => navigate("settings")} />
-          <NavLink icon={<Users size={17} />}           label="Customers"      active={activeTab === "customers"}     onClick={() => navigate("customers")} />
+          <NavLink icon={<Users size={17} />}           label="Leads"          active={activeTab === "customers"}     count={leads.length} onClick={() => navigate("customers")} />
         </nav>
 
         <div className="p-4 border-t border-slate-50">
@@ -496,7 +461,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-[260px] flex flex-col min-h-screen">
+      <div className="flex-1 lg:ml-65 flex flex-col min-h-screen">
         {/* Header */}
         <header className="header-anim h-16 sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100/80 flex items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-3">
@@ -547,9 +512,31 @@ export default function AdminDashboard() {
                 <p className="text-slate-400 text-sm mt-1 font-medium">Performance at a glance</p>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                <StatCard icon={<Package size={20} />}      title="Products" value={products.length} trend="+12%" color="#ED1C24" />
-                <StatCard icon={<TrendingUp size={20} />}   title="Revenue"  value="$42.3k"          trend="+8%"  color="#10b981" />
-                <StatCard icon={<ShoppingCart size={20} />} title="Orders"   value="1,240"           trend="+14%" color="#6366f1" className="col-span-2 lg:col-span-1" />
+                {/* Card 1: Total Products */}
+                <StatCard
+                  icon={<Package size={20} />}
+                  title="Products"
+                  value={products.length}
+                  trend={`${activeProductsCount} active`}
+                  color="#ED1C24"
+                />
+                {/* Card 2: Total Leads */}
+                <StatCard
+                  icon={<PhoneCall size={20} />}
+                  title="Total Leads"
+                  value={leads.length}
+                  trend="All time"
+                  color="#6366f1"
+                />
+                {/* Card 3: Active Products */}
+                <StatCard
+                  icon={<TrendingUp size={20} />}
+                  title="Active Products"
+                  value={activeProductsCount}
+                  trend={`${products.length > 0 ? Math.round((activeProductsCount / products.length) * 100) : 0}% of catalog`}
+                  color="#10b981"
+                  className="col-span-2 lg:col-span-1"
+                />
               </div>
             </div>
           )}
@@ -575,8 +562,13 @@ export default function AdminDashboard() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <FormInput label="Price (PKR) *" value={form.price}          onChange={(e) => setForm({ ...form, price: e.target.value })}         placeholder="2999" type="number" required />
-                  <FormInput label={`Original Price${savings > 0 ? ` — ${savings}% savings` : ""}`}
-                             value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} placeholder="4500" type="number" />
+                  <FormInput
+                    label={`Original Price${savings > 0 ? ` — ${savings}% savings` : ""}`}
+                    value={form.originalPrice}
+                    onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
+                    placeholder="4500"
+                    type="number"
+                  />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <FormInput label="Badge" value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} placeholder="Best Seller" />
@@ -588,7 +580,7 @@ export default function AdminDashboard() {
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
-                    className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-200 min-h-[100px] transition-all resize-none"
+                    className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-200 min-h-25 transition-all resize-none"
                     placeholder="Product description…"
                   />
                 </div>
@@ -702,33 +694,49 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* ── Customers ── */}
+          {/* ── Leads / Customers ── */}
           {activeTab === "customers" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight">Community</h1>
-                <p className="text-slate-400 text-sm mt-1 font-medium">Registered clients</p>
+                <h1 className="text-2xl md:text-3xl font-black tracking-tight">Leads</h1>
+                <p className="text-slate-400 text-sm mt-1 font-medium">
+                  {leads.length} lead{leads.length !== 1 ? "s" : ""} collected
+                </p>
               </div>
+
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left min-w-[560px]">
-                    <thead>
-                      <tr className="border-b border-slate-50">
-                        {["Client", "Status", "Plan", "Action"].map((h) => (
-                          <th key={h} className={`px-6 py-4 text-[9px] font-black text-slate-300 uppercase tracking-[0.18em]${h === "Action" ? " text-right" : ""}`}>{h}</th>
+                {leads.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-24 text-slate-300">
+                    <PhoneCall size={48} strokeWidth={1} />
+                    <p className="mt-4 font-bold text-slate-400">No leads yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left min-w-140">
+                      <thead>
+                        <tr className="border-b border-slate-50">
+                          {["Phone Number", "Date", "Page", ""].map((h, i) => (
+                            <th
+                              key={i}
+                              className={`px-6 py-4 text-[9px] font-black text-slate-300 uppercase tracking-[0.18em]${i === 3 ? " text-right" : ""}`}
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50/80">
+                        {leads.map((lead) => (
+                          <LeadRow key={lead.id} lead={lead} />
                         ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50/80">
-                      <CustomerRow name="Aisha Khan"    email="aisha@example.com" status="Active"  plan="Enterprise"    />
-                      <CustomerRow name="Michael Chen"  email="m.chen@dev.com"    status="Pending" plan="Professional"  />
-                      <CustomerRow name="Sarah Miller"  email="sarah@design.io"   status="Active"  plan="Starter"       />
-                    </tbody>
-                  </table>
-                </div>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
+
         </div>
       </div>
 
@@ -738,7 +746,7 @@ export default function AdminDashboard() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// SUB-COMPONENTS  (unchanged visually)
+// SUB-COMPONENTS
 // ══════════════════════════════════════════════════════════════════
 
 function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
@@ -761,7 +769,7 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
       ref={menuRef}
       className={`product-card group relative bg-white rounded-2xl flex flex-col overflow-hidden border border-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60 ${!p.isActive ? "opacity-55 grayscale-[0.5]" : ""}`}
     >
-      <div className="relative w-full aspect-[16/9] bg-slate-50 overflow-hidden shrink-0">
+      <div className="relative w-full aspect-video bg-slate-50 overflow-hidden shrink-0">
         {p.image && !imgError ? (
           <img
             src={p.image}
@@ -833,12 +841,64 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
             {p.isActive ? "Live" : "Off"}
           </button>
           <div className="flex items-center gap-1">
-            <button onClick={() => onEdit(p)}     className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all" title="Edit product"><Edit3 size={14} /></button>
+            <button onClick={() => onEdit(p)}      className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all" title="Edit product"><Edit3 size={14} /></button>
             <button onClick={() => onDelete(p.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"  title="Delete product"><Trash2 size={14} /></button>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+// ── LeadRow ───────────────────────────────────────────────────────────────
+function LeadRow({ lead }) {
+  const formattedDate = lead.createdAt?.seconds
+    ? new Date(lead.createdAt.seconds * 1000).toLocaleString("en-PK", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "—";
+
+  return (
+    <tr className="hover:bg-slate-50/40 transition-colors">
+      {/* Phone */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: "#6366f115" }}
+          >
+            <PhoneCall size={15} style={{ color: "#6366f1" }} />
+          </div>
+          <p className="text-sm font-bold text-slate-800 font-mono tracking-wide">
+            {lead.phone || "—"}
+          </p>
+        </div>
+      </td>
+      {/* Date */}
+      <td className="px-6 py-4">
+        <p className="text-xs font-semibold text-slate-500">{formattedDate}</p>
+      </td>
+      {/* Page */}
+      <td className="px-6 py-4">
+        {lead.page ? (
+          <span className="text-[9px] font-black bg-slate-100 text-slate-500 px-2.5 py-1 rounded-lg uppercase tracking-wider">
+            {lead.page}
+          </span>
+        ) : (
+          <span className="text-xs text-slate-300 font-medium">—</span>
+        )}
+      </td>
+      {/* Action placeholder (keeps layout consistent) */}
+      <td className="px-6 py-4 text-right">
+        <button className="p-1.5 text-slate-300 hover:text-slate-500 transition-colors rounded-lg hover:bg-slate-50">
+          <MoreVertical size={15} />
+        </button>
+      </td>
+    </tr>
   );
 }
 
@@ -870,7 +930,9 @@ function StatCard({ icon, title, value, trend, color, className = "" }) {
       </div>
       <div className="flex items-end justify-between">
         <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{value}</h2>
-        <span className="text-[10px] font-black text-green-600 bg-green-50 px-2 py-1 rounded-lg mb-0.5">{trend}</span>
+        <span className="text-[10px] font-black text-slate-500 bg-slate-50 px-2 py-1 rounded-lg mb-0.5 max-w-25 text-right leading-tight">
+          {trend}
+        </span>
       </div>
     </div>
   );
@@ -890,40 +952,11 @@ function FormInput({ label, ...props }) {
   );
 }
 
-function CustomerRow({ name, email, status, plan }) {
-  return (
-    <tr className="hover:bg-slate-50/40 transition-colors">
-      <td className="px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shrink-0" style={{ background: ACCENT }}>
-            {name[0]}
-          </div>
-          <div>
-            <p className="text-sm font-bold text-slate-800">{name}</p>
-            <p className="text-[10px] text-slate-400 font-medium">{email}</p>
-          </div>
-        </div>
-      </td>
-      <td className="px-6 py-4">
-        <span className={`text-[9px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider ${status === "Active" ? "bg-green-50 text-green-600" : "bg-amber-50 text-amber-500"}`}>
-          {status}
-        </span>
-      </td>
-      <td className="px-6 py-4 text-xs font-bold text-slate-500">{plan}</td>
-      <td className="px-6 py-4 text-right">
-        <button className="p-1.5 text-slate-300 hover:text-slate-500 transition-colors rounded-lg hover:bg-slate-50">
-          <MoreVertical size={15} />
-        </button>
-      </td>
-    </tr>
-  );
-}
-
 function Toast({ toast }) {
   if (!toast.show) return null;
   return (
     <div
-      className={`fixed bottom-5 right-5 z-[9999] px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-white text-sm font-bold animate-in slide-in-from-right-4 duration-300 ${toast.type === "error" ? "" : "bg-slate-900"}`}
+      className={`fixed bottom-5 right-5 z-9999 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-white text-sm font-bold animate-in slide-in-from-right-4 duration-300 ${toast.type === "error" ? "" : "bg-slate-900"}`}
       style={toast.type === "error" ? { background: ACCENT } : {}}
     >
       {toast.type === "error" ? <AlertCircle size={17} /> : <CheckCircle size={17} className="text-green-400" />}
