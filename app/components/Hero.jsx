@@ -201,25 +201,25 @@ export default function HeroCentered() {
                 <div className="flex gap-5 text-[1rem] md:text-[1rem] font-black tabular-nums text-[#ED1C24]">
                   <span>
                     {String(timeLeft.days).padStart(2, "0")}
-                    <span className="text-xs font-normal text-gray-500 ml-0.5">
+                    <span className="text-[0.6rem] lg:text-[0.8rem] font-normal text-gray-500 ml-0.5">
                       D
                     </span>
                   </span>
                   <span>
                     {String(timeLeft.hours).padStart(2, "0")}
-                    <span className="text-xs font-normal text-gray-500 ml-0.5">
+                    <span className="text-[0.6rem] lg:text-[0.8rem] font-normal text-gray-500 ml-0.5">
                       H
                     </span>
                   </span>
                   <span>
                     {String(timeLeft.minutes).padStart(2, "0")}
-                    <span className="text-xs font-normal text-gray-500 ml-0.5">
+                    <span className="text-[0.6rem] lg:text-[0.8rem] font-normal text-gray-500 ml-0.5">
                       M
                     </span>
                   </span>
                   <span>
                     {String(timeLeft.seconds).padStart(2, "0")}
-                    <span className="text-xs font-normal text-gray-500 ml-0.5">
+                    <span className="text-[0.6rem] lg:text-[0.8rem] font-normal text-gray-500 ml-0.5">
                       S
                     </span>
                   </span>
