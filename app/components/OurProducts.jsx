@@ -55,7 +55,8 @@ export default function OurProducts() {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [fetchProducts]);
 
   // GSAP Animation
@@ -81,7 +82,7 @@ export default function OurProducts() {
               ease: "power2.out",
               scrollTrigger: { trigger: el, start: "top 90%" },
               delay: (i % 3) * 0.08,
-            }
+            },
           );
         });
       });
@@ -121,22 +122,27 @@ export default function OurProducts() {
             </div>
           ) : products.length === 0 ? (
             <div className="col-span-full py-16 text-center">
-              <p className="text-gray-400 text-sm">No active products available at the moment.</p>
+              <p className="text-gray-400 text-sm">
+                No active products available at the moment.
+              </p>
             </div>
           ) : (
             products.map((p, i) => {
               const features = Array.isArray(p.features)
                 ? p.features
                 : typeof p.features === "string"
-                ? p.features.split(",").map((f) => f.trim()).filter(Boolean)
-                : [];
+                  ? p.features
+                      .split(",")
+                      .map((f) => f.trim())
+                      .filter(Boolean)
+                  : [];
 
               const savings =
                 p.originalPrice && p.price
                   ? Math.round(
                       ((parseFloat(p.originalPrice) - parseFloat(p.price)) /
                         parseFloat(p.originalPrice)) *
-                        100
+                        100,
                     )
                   : 0;
 
@@ -179,13 +185,14 @@ export default function OurProducts() {
                       </span>
                     </div>
 
-                    <div className="h-24 sm:h-28 flex items-center justify-center w-full">
+                    <div className="h-24 sm:h-28 w-full flex items-center justify-center overflow-hidden rounded-lg  group">
                       <img
                         src={p.image}
                         alt={p.title}
-                        className="max-h-full max-w-[70%] sm:max-w-full object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/400x300?text=Product+Image";
+                          e.target.src =
+                            "https://via.placeholder.com/400x300?text=Product+Image";
                         }}
                       />
                     </div>
@@ -218,7 +225,9 @@ export default function OurProducts() {
                           >
                             <CheckCircle2
                               className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
-                                p.highlight ? "text-[#ED1C24]" : "text-emerald-500"
+                                p.highlight
+                                  ? "text-[#ED1C24]"
+                                  : "text-emerald-500"
                               }`}
                             />
                             <span className="truncate">{f}</span>
