@@ -107,10 +107,10 @@ export default function OurProducts() {
                   key={p.id}
                   ref={(el) => (cardRefs.current[i] = el)}
                   onClick={() => router.push(`/product/${p.id}`)}
-                  className={`group cursor-pointer relative flex flex-col bg-white rounded-2xl border overflow-hidden transition-all duration-300 sm:hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-gray-200/60 ${
+                  className={`group cursor-pointer relative flex flex-col bg-white rounded-lg border overflow-hidden transition-all duration-300 sm:hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-gray-200/60 ${
                     p.highlight
                       ? "border-[#ED1C24] shadow-lg shadow-red-100/80 ring-1 ring-[#ED1C24]/20"
-                      : "border-gray-100 shadow-sm hover:border-gray-200"
+                      : "border-gray-100 shadow-sm  hover:border-gray-200"
                   }`}
                 >
                   {p.highlight && (
@@ -160,7 +160,7 @@ export default function OurProducts() {
                   {/* ── CARD BODY ── */}
                   <div className="flex flex-col flex-1 p-2.5 sm:p-5">
                     {/* Title + Subtitle */}
-                    <div className="mb-1.5 sm:mb-3">
+                    <div className="mt-2 mb-1.5 sm:mb-3">
                       <h3 className="text-xs sm:text-base font-black text-gray-900 leading-snug line-clamp-2">
                         {p.title}
                       </h3>
