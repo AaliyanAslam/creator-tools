@@ -2,7 +2,14 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, X, MessageCircle, Phone, Clock, ChevronRight } from "lucide-react";
+import {
+  Menu,
+  X,
+  MessageCircle,
+  Phone,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
 
 /* ─────────────────────────────────────────────
    Keyframe injection — SSR-safe, runs once
@@ -68,10 +75,10 @@ const MARQUEE_TEXT =
   "VEO-3 Ultra Plan \u00a0•\u00a0 Top Selling \u00a0•\u00a0 Semi Private Account \u00a0•\u00a0 30 Days Warranty \u00a0•\u00a0 Unlimited VEO 3 Fast Generation \u00a0•\u00a0 Nano Banana Image Generation \u00a0•\u00a0 Limited Slots Available \u00a0•\u00a0 Buy via WhatsApp \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0";
 
 const navLinks = [
-  { label: "Home",            href: "/"                },
-  { label: "Pricing & Plans", href: "#products"        },
-  { label: "Contact Us",      href: "tel:+923041333420"},
-  { label: "FAQs",            href: "#"                },
+  { label: "Home", href: "/" },
+  { label: "Pricing & Plans", href: "#products" },
+  { label: "Contact Us", href: "tel:+923041333420" },
+  { label: "FAQs", href: "#" },
 ];
 
 const socialLinks = [];
@@ -117,7 +124,14 @@ export default function Navbar() {
           }}
         />
 
-        <div style={{ overflow: "hidden", padding: "6px 0", position: "relative", zIndex: 3 }}>
+        <div
+          style={{
+            overflow: "hidden",
+            padding: "6px 0",
+            position: "relative",
+            zIndex: 3,
+          }}
+        >
           <div className="ctu-marquee-track" aria-hidden="true">
             {/* Two identical copies — second copy makes the loop invisible */}
             {[0, 1].map((idx) => (
@@ -166,9 +180,8 @@ export default function Navbar() {
       ════════════════════════════════════════ */}
       <nav className="sticky top-0 z-30 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16">
-
           {/* Logo — clamp keeps it big on mobile without overflow */}
-          <a href="/" className="flex-shrink-0">
+          <a href="/" className="shrink-0">
             <Image
               src="/logo/ctu1.png"
               width={220}
@@ -194,7 +207,7 @@ export default function Navbar() {
           </div>
 
           {/* Right buttons */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <a
               href={WA_LINK}
               target="_blank"
@@ -222,7 +235,7 @@ export default function Navbar() {
             position: "relative",
             height: "1.5px",
             width: "100%",
-            background: "rgba(237,28,36,0.10)",   /* dim base track */
+            background: "rgba(237,28,36,0.10)" /* dim base track */,
             overflow: "hidden",
           }}
         >
