@@ -74,7 +74,7 @@ export default function OurProducts() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5">
+        <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-4">
           {loading && products.length === 0 ? (
             <div className="col-span-full py-20 text-center">
               <div className="w-8 h-8 border-4 border-gray-200 border-t-[#ED1C24] rounded-full animate-spin mx-auto mb-4" />
