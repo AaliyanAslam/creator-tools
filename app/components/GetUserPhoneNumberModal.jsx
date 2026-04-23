@@ -1,12 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "@/config/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { urbanist } from "../fonts";
 
 const GetUserPhoneNumberModal = ({ isOpen, onClose }) => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -34,7 +47,9 @@ const GetUserPhoneNumberModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50">
+    <div
+      className={`fixed inset-0 z-9999 flex items-center justify-center bg-black/50 ${urbanist.className}`}
+    >
       <div className="bg-white rounded-2xl p-6 w-[90%] max-w-md text-center">
         <h2 className="text-xl font-bold mb-3">Enter Your Phone</h2>
         <p className="text-sm text-gray-500 mb-4">

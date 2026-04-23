@@ -1,20 +1,21 @@
+"use client";
+
 import Image from "next/image";
-import { 
-  Phone, 
-  Clock, 
-  MessageCircle, 
+import {
+  Phone,
+  Clock,
+  MessageCircle,
   ChevronRight,
   Instagram,
   Facebook,
   Youtube,
-  Music2 
+  Music2,
 } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "#" },
   { label: "Pricing & Plans", href: "#products" },
   { label: "Contact Us", href: "tel:+923041333420" },
-  { label: "FAQs", href: "#" },
 ];
 
 const socialLinks = [
@@ -29,7 +30,6 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 sm:mb-10">
-          
           {/* Logo & About */}
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="mb-4">
@@ -42,10 +42,10 @@ export default function Footer() {
               />
             </div>
             <p className="text-gray-400 text-xs sm:text-sm leading-relaxed max-w-xs mb-5">
-              Premium digital subscriptions at Pakistan's lowest prices. 
+              Premium digital subscriptions at Pakistan's lowest prices.
               Verified accounts, instant delivery.
             </p>
-            
+
             {/* Social Links */}
             <div className="flex gap-2">
               {socialLinks.map(({ icon: Icon, label, href }) => (
@@ -111,12 +111,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="border-t border-gray-800 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-gray-600 text-[11px] sm:text-xs font-medium text-center sm:text-left">
-            © {new Date().getFullYear()} Creator Tools by Usama. All rights reserved.
+            © {new Date().getFullYear()} Creator Tools by Usama. All rights
+            reserved.
           </p>
-          <p className="text-gray-700 text-[11px] sm:text-xs font-medium">
-            Made with ❤️ in Pakistan
+          <p
+            onClick={() => window.open("https://wa.me/923477071276", "_blank")}
+            className="text-gray-700 text-[11px] sm:text-xs font-medium cursor-pointer hover:text-[#25D366] transition-colors"
+          >
+            Made in Pakistan | Get your professional website today
           </p>
         </div>
       </div>

@@ -78,7 +78,6 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Pricing & Plans", href: "#products" },
   { label: "Contact Us", href: "tel:+923041333420" },
-  { label: "FAQs", href: "#" },
 ];
 
 const socialLinks = [];
