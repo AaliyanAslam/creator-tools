@@ -1,55 +1,14 @@
 "use client";
 
 import { ShoppingCart, CheckCircle2, ChevronRight } from "lucide-react";
-import { useEffect, useRef, useState, useCallback } from "react";
-import { db } from "@/config/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
-
-const CACHE_DURATION = 2 * 60 * 1000; // 2 minutes
+import { useProducts } from "@/lib/hooks";
 
 export default function OurProducts() {
   const cardRefs = useRef([]);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const lastFetchedRef = useRef(0);
   const router = useRouter();
-
-  const fetchProducts = useCallback(async () => {
-    const now = Date.now();
-
-    if (now - lastFetchedRef.current < CACHE_DURATION && products.length > 0) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const snapshot = await getDocs(collection(db, "products"));
-
-      const data = snapshot.docs
-        .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .filter((p) => p.isActive === true);
-
-      setProducts(data);
-      lastFetchedRef.current = now;
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [products.length]);
-
-  useEffect(() => {
-    fetchProducts();
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") fetchProducts();
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [fetchProducts]);
+  const { products, loading, error } = useProducts();
 
   return (
     <section id="products" className="py-10 sm:py-14">
