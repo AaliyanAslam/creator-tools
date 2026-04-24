@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import LearnNEarn from "./components/LearnNEarn";
 import Navbar from "./components/Navbar";
 import OurProducts from "./components/OurProducts";
+import Reviews from "./components/Reviews";
 import { urbanist } from "./fonts";
 
 export const metadata = {
@@ -18,6 +19,7 @@ export default function page() {
       <div className={`${urbanist.className}`}>
         <Navbar />
         <Hero />
+        <Reviews/>
         <OurProducts />
         <LearnNEarn />
         <CTA />
