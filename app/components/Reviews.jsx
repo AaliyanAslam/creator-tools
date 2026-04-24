@@ -2,12 +2,13 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Quote, X } from "lucide-react";
 
 const Reviews = () => {
   const scrollRef = useRef(null);
   const [showLeftBtn, setShowLeftBtn] = useState(false);
   const [showRightBtn, setShowRightBtn] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   // Generate image paths r1.jpg to r8.jpg
   const reviewImages = Array.from(
@@ -31,6 +32,20 @@ const Reviews = () => {
     }
   }, []);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setSelectedImageIndex(null);
+      }
+    };
+
+    if (selectedImageIndex !== null) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [selectedImageIndex]);
+
   const scroll = (direction) => {
     if (scrollRef.current) {
       const { clientWidth } = scrollRef.current;
@@ -38,6 +53,18 @@ const Reviews = () => {
         direction === "left" ? -clientWidth / 1.5 : clientWidth / 1.5;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
+  };
+
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prev) =>
+      prev === 0 ? reviewImages.length - 1 : prev - 1,
+    );
+  };
+
+  const handleNextImage = () => {
+    setSelectedImageIndex((prev) =>
+      prev === reviewImages.length - 1 ? 0 : prev + 1,
+    );
   };
 
   return (
@@ -106,7 +133,10 @@ const Reviews = () => {
                 key={index}
                 className="min-w-[160px] sm:min-w-[220px] md:min-w-[300px] lg:min-w-[380px] snap-center flex-shrink-0"
               >
-                <div className="relative aspect-[9/16] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 sm:border-3 md:border-4 border-white shadow-md hover:shadow-xl sm:hover:shadow-2xl transition-shadow duration-500 bg-gray-100 group/card">
+                <div
+                  className="relative aspect-[9/16] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 sm:border-3 md:border-4 border-white shadow-md hover:shadow-xl sm:hover:shadow-2xl transition-shadow duration-500 bg-gray-100 group/card cursor-pointer"
+                  onClick={() => setSelectedImageIndex(index)}
+                >
                   {/* Overlay for aesthetic */}
                   <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
 
@@ -138,6 +168,60 @@ const Reviews = () => {
           <div className="h-[1px] w-8 sm:w-10 md:w-12 bg-gray-200" />
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImageIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 sm:p-6 backdrop-blur-sm"
+          onClick={() => setSelectedImageIndex(null)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setSelectedImageIndex(null)}
+            className="absolute top-4 sm:top-6 right-4 sm:right-6 z-51 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 rounded-full transition-colors duration-200 hover:backdrop-blur-md"
+          >
+            <X className="w-6 h-6 sm:w-8 sm:h-8" />
+          </button>
+
+          {/* Main Image Container */}
+          <div
+            className="relative w-full h-full max-w-2xl max-h-[90vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Image */}
+            <div className="relative w-full h-full">
+              <Image
+                src={reviewImages[selectedImageIndex]}
+                alt={`Full View - Review ${selectedImageIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 90vw, 90vh"
+              />
+            </div>
+
+            {/* Left Navigation Arrow */}
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-colors duration-200 hover:backdrop-blur-md group"
+            >
+              <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+            </button>
+
+            {/* Right Navigation Arrow */}
+            <button
+              onClick={handleNextImage}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 text-white p-2 sm:p-3 rounded-full transition-colors duration-200 hover:backdrop-blur-md group"
+            >
+              <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+            </button>
+
+            {/* Image Counter */}
+            <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-semibold backdrop-blur-md">
+              {selectedImageIndex + 1} / {reviewImages.length}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Custom CSS for hiding scrollbar and smooth thumb scrolling */}
       <style jsx global>{`
