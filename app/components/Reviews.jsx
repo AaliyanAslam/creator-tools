@@ -131,10 +131,10 @@ const Reviews = () => {
             {reviewImages.map((src, index) => (
               <div
                 key={index}
-                className="min-w-[160px] sm:min-w-[220px] md:min-w-[300px] lg:min-w-[380px] snap-center flex-shrink-0"
+                className="min-w-40 sm:min-w-55 md:min-w-75 lg:min-w-95 snap-center shrink-0"
               >
                 <div
-                  className="relative aspect-[9/16] rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 sm:border-3 md:border-4 border-white shadow-md hover:shadow-xl sm:hover:shadow-2xl transition-shadow duration-500 bg-gray-100 group/card cursor-pointer"
+                  className="relative aspect-9/16 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 sm:border-3 md:border-4 border-white shadow-md hover:shadow-xl sm:hover:shadow-2xl transition-shadow duration-500 bg-gray-100 group/card cursor-pointer"
                   onClick={() => setSelectedImageIndex(index)}
                 >
                   {/* Overlay for aesthetic */}
@@ -161,11 +161,11 @@ const Reviews = () => {
 
         {/* Bottom Trust Line */}
         <div className="mt-4 sm:mt-6 md:mt-8 flex justify-center items-center gap-2 sm:gap-3 md:gap-4 text-gray-400">
-          <div className="h-[1px] w-8 sm:w-10 md:w-12 bg-gray-200" />
+          <div className="h-px w-8 sm:w-10 md:w-12 bg-gray-200" />
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest whitespace-nowrap">
             Swipe to see more
           </span>
-          <div className="h-[1px] w-8 sm:w-10 md:w-12 bg-gray-200" />
+          <div className="h-px w-8 sm:w-10 md:w-12 bg-gray-200" />
         </div>
       </div>
 
