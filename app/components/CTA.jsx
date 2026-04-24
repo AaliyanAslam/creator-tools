@@ -34,7 +34,7 @@ export default function CTA() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
-                href="https://wa.me/923041333420"
+                href="https://wa.me/923193533420"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-[#ED1C24] font-black px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm hover:bg-red-50 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto justify-center"
@@ -44,7 +44,7 @@ export default function CTA() {
               </a>
 
               <a
-                href="tel:+923041333420"
+                href="tel:+923193533420"
                 className="inline-flex items-center gap-2 border-2 border-white/25 hover:border-white/60 text-white font-bold px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm transition-all duration-200 hover:-translate-y-0.5 w-full sm:w-auto justify-center"
               >
                 <Phone className="w-4 h-4 shrink-0" />

@@ -24,7 +24,7 @@ export default function OurProducts() {
             </h2>
           </div>
           <a
-            href="https://wa.me/923041333420"
+            href="https://wa.me/923193533420"
             target="_blank"
             className="hidden sm:flex items-center gap-1 text-xs sm:text-sm font-semibold text-gray-400 hover:text-[#ED1C24]"
           >
@@ -184,7 +184,7 @@ export default function OurProducts() {
                       </div>
 
                       <a
-                        href="https://wa.me/923041333420"
+                        href="https://wa.me/923193533420"
                         target="_blank"
                         onClick={(e) => e.stopPropagation()}
                         className={`inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-sm font-bold px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl transition-all duration-200 sm:hover:-translate-y-0.5 shrink-0 ${

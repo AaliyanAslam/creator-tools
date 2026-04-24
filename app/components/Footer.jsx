@@ -15,7 +15,7 @@ import {
 const navLinks = [
   { label: "Home", href: "#" },
   { label: "Pricing & Plans", href: "#products" },
-  { label: "Contact Us", href: "tel:+923041333420" },
+  { label: "Contact Us", href: "tel:+923193533420" },
 ];
 
 const socialLinks = [
@@ -97,7 +97,7 @@ export default function Footer() {
               </li>
               <li className="pt-1">
                 <a
-                  href="https://wa.me/923041333420"
+                  href="https://wa.me/923193533420"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-200"

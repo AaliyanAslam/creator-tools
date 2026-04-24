@@ -188,7 +188,7 @@ export default function HeroCentered() {
               <div className="absolute -inset-6 sm:-inset-12 bg-linear-to-r from-red-100 via-orange-50 to-red-100 rounded-2xl sm:rounded-[3rem] blur-3xl opacity-40 group-hover:opacity-60 transition-opacity duration-1000" />
               <div className="relative rounded-lg sm:rounded-2xl overflow-hidden shadow-xl sm:shadow-2xl bg-white">
                 <a
-                  href="https://wa.me/923041333420"
+                  href="https://wa.me/923193533420"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

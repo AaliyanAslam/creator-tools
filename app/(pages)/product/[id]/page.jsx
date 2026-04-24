@@ -214,7 +214,7 @@ export default function ProductDetails() {
           )}
         </div>
         <a
-          href={`https://wa.me/923041333420?text=I'm interested in: ${encodeURIComponent(product.title)}`}
+          href={`https://wa.me/923193533420?text=I'm interested in: ${encodeURIComponent(product.title)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 flex items-center gap-2 bg-[#ED1C24] text-white font-black text-xs tracking-widest py-3.5 px-6 rounded-xl transition-all active:scale-95 shadow-[0_4px_16px_rgba(237,28,36,0.35)]"
@@ -358,7 +358,7 @@ export default function ProductDetails() {
 
                 {/* CTA Button */}
                 <a
-                  href={`https://wa.me/923041333420?text=I'm interested in purchasing: ${encodeURIComponent(product.title)}`}
+                  href={`https://wa.me/923193533420?text=I'm interested in purchasing: ${encodeURIComponent(product.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group/cta w-full flex items-center justify-center gap-3 bg-[#ED1C24] hover:bg-[#c9151b] text-white font-black text-sm tracking-widest py-4 sm:py-5 px-8 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(237,28,36,0.45)] active:scale-[0.98]"

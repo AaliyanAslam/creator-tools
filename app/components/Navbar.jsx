@@ -69,7 +69,7 @@ if (typeof document !== "undefined" && !document.getElementById(STYLE_ID)) {
 /* ─────────────────────────────────────────────
    Constants
 ───────────────────────────────────────────── */
-const WA_LINK = "https://wa.me/923041333420";
+const WA_LINK = "https://wa.me/923193533420";
 
 const MARQUEE_TEXT =
   "VEO-3 Ultra Plan \u00a0•\u00a0 Top Selling \u00a0•\u00a0 Semi Private Account \u00a0•\u00a0 30 Days Warranty \u00a0•\u00a0 Unlimited VEO 3 Fast Generation \u00a0•\u00a0 Nano Banana Image Generation \u00a0•\u00a0 Limited Slots Available \u00a0•\u00a0 Buy via WhatsApp \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0";
@@ -77,7 +77,7 @@ const MARQUEE_TEXT =
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Pricing & Plans", href: "#products" },
-  { label: "Contact Us", href: "tel:+923041333420" },
+  { label: "Contact Us", href: "tel:+923193533420" },
 ];
 
 const socialLinks = [];
@@ -165,11 +165,11 @@ export default function Navbar() {
             <span>Mon – Fri: 8AM – 5PM</span>
           </div>
           <a
-            href="tel:+923041333420"
+            href="tel:+923193533420"
             className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold hover:opacity-80 transition-opacity"
           >
             <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-            <span>+92304 1333420</span>
+            <span>+92 319 3533420</span>
           </a>
         </div>
       </div>
@@ -290,11 +290,11 @@ export default function Navbar() {
 
           <div className="px-3 space-y-3">
             <a
-              href="tel:+923041333420"
+              href="tel:+923193533420"
               className="flex items-center gap-2.5 text-sm text-gray-500 font-medium hover:text-[#ED1C24] transition-colors"
             >
               <Phone className="w-4 h-4 text-[#ED1C24] shrink-0" />
-              +92304 1333420
+              +92 319 3533420
             </a>
             <div className="flex items-center gap-2.5 text-sm text-gray-500 font-medium">
               <Clock className="w-4 h-4 text-[#ED1C24] shrink-0" />
