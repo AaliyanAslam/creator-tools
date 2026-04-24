@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { db } from "@/config/firebase";
 import {
   collection,
@@ -46,30 +52,42 @@ const ACCENT = "#ED1C24";
 const SIDEBAR_WIDTH = 260;
 
 export default function AdminDashboard() {
-  const [isLoggedIn, setIsLoggedIn]       = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab]         = useState("dashboard");
-  const [products, setProducts]           = useState([]);
-  const [leads, setLeads]                 = useState([]);           // ← NEW
-  const [loading, setLoading]             = useState(true);
-  const [btnLoading, setBtnLoading]       = useState(false);
-  const [editingId, setEditingId]         = useState(null);
-  const [searchQuery, setSearchQuery]     = useState("");
-  const [toast, setToast]                 = useState({ show: false, message: "", type: "success" });
-  const [countdownEnd, setCountdownEnd]   = useState("");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [products, setProducts] = useState([]);
+  const [leads, setLeads] = useState([]); // ← NEW
+  const [loading, setLoading] = useState(true);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+  const [countdownEnd, setCountdownEnd] = useState("");
 
   const emptyForm = {
-    title: "", subtitle: "", description: "", features: "",
-    price: "", originalPrice: "", badge: "", tag: "", image: "", isActive: true,
+    title: "",
+    subtitle: "",
+    description: "",
+    features: "",
+    price: "",
+    originalPrice: "",
+    badge: "",
+    tag: "",
+    image: "",
+    isActive: true,
   };
   const [form, setForm] = useState(emptyForm);
 
-  const mainContentRef  = useRef(null);
-  const sidebarRef      = useRef(null);
-  const backdropRef     = useRef(null);
-  const loginRef        = useRef(null);
-  const toastTimerRef   = useRef(null);
-  const sidebarInitRef  = useRef(false);
+  const mainContentRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const backdropRef = useRef(null);
+  const loginRef = useRef(null);
+  const toastTimerRef = useRef(null);
+  const sidebarInitRef = useRef(false);
 
   // ── Auth ──────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -77,7 +95,7 @@ export default function AdminDashboard() {
     if (auth === "true") {
       setIsLoggedIn(true);
       fetchProducts();
-      fetchLeads();   // ← fetch leads on page-load if already logged in
+      fetchLeads(); // ← fetch leads on page-load if already logged in
     } else {
       setLoading(false);
     }
@@ -117,11 +135,33 @@ export default function AdminDashboard() {
     if (isDesktop) return;
 
     if (isSidebarOpen) {
-      gsap.to(sidebarRef.current,  { x: 0,              duration: 0.32, ease: "power3.out", overwrite: true });
-      gsap.to(backdropRef.current, { opacity: 1,         duration: 0.28, ease: "power2.out", pointerEvents: "auto",  overwrite: true });
+      gsap.to(sidebarRef.current, {
+        x: 0,
+        duration: 0.32,
+        ease: "power3.out",
+        overwrite: true,
+      });
+      gsap.to(backdropRef.current, {
+        opacity: 1,
+        duration: 0.28,
+        ease: "power2.out",
+        pointerEvents: "auto",
+        overwrite: true,
+      });
     } else {
-      gsap.to(sidebarRef.current,  { x: -SIDEBAR_WIDTH, duration: 0.28, ease: "power3.in",  overwrite: true });
-      gsap.to(backdropRef.current, { opacity: 0,         duration: 0.22, ease: "power2.in",  pointerEvents: "none", overwrite: true });
+      gsap.to(sidebarRef.current, {
+        x: -SIDEBAR_WIDTH,
+        duration: 0.28,
+        ease: "power3.in",
+        overwrite: true,
+      });
+      gsap.to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.22,
+        ease: "power2.in",
+        pointerEvents: "none",
+        overwrite: true,
+      });
     }
   }, [isSidebarOpen]);
 
@@ -132,35 +172,46 @@ export default function AdminDashboard() {
       const scrollY = window.scrollY;
       html.style.overflow = "hidden";
       html.style.position = "fixed";
-      html.style.top      = `-${scrollY}px`;
-      html.style.width    = "100%";
+      html.style.top = `-${scrollY}px`;
+      html.style.width = "100%";
     } else {
       const scrollY = html.style.top ? parseInt(html.style.top || "0") * -1 : 0;
       html.style.overflow = "";
       html.style.position = "";
-      html.style.top      = "";
-      html.style.width    = "";
+      html.style.top = "";
+      html.style.width = "";
       if (scrollY) window.scrollTo(0, scrollY);
     }
     return () => {
       html.style.overflow = "";
       html.style.position = "";
-      html.style.top      = "";
-      html.style.width    = "";
+      html.style.top = "";
+      html.style.width = "";
     };
   }, [isSidebarOpen]);
 
   // ── Login GSAP animation ──────────────────────────────────────────────────
   useGSAP(() => {
     if (!isLoggedIn && loginRef.current) {
-      gsap.from(loginRef.current, { scale: 0.92, opacity: 0, duration: 0.7, ease: "back.out(1.7)" });
+      gsap.from(loginRef.current, {
+        scale: 0.92,
+        opacity: 0,
+        duration: 0.7,
+        ease: "back.out(1.7)",
+      });
     }
   }, [isLoggedIn]);
 
   // ── Header entrance animation ─────────────────────────────────────────────
   useGSAP(() => {
     if (!isLoggedIn) return;
-    gsap.from(".header-anim", { y: -20, opacity: 0, duration: 0.6, delay: 0.15, ease: "power3.out" });
+    gsap.from(".header-anim", {
+      y: -20,
+      opacity: 0,
+      duration: 0.6,
+      delay: 0.15,
+      ease: "power3.out",
+    });
   }, [isLoggedIn]);
 
   // ── Page-tab transition ───────────────────────────────────────────────────
@@ -169,7 +220,7 @@ export default function AdminDashboard() {
       gsap.fromTo(
         mainContentRef.current,
         { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.38, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.38, ease: "power2.out" },
       );
     }
   }, [activeTab]);
@@ -182,7 +233,14 @@ export default function AdminDashboard() {
         gsap.fromTo(
           cards,
           { opacity: 0, y: 20, scale: 0.97 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.06, ease: "power2.out" }
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.4,
+            stagger: 0.06,
+            ease: "power2.out",
+          },
         );
       }
     }
@@ -232,17 +290,25 @@ export default function AdminDashboard() {
       pass === process.env.NEXT_PUBLIC_ADMIN_PASS
     ) {
       gsap.to(loginRef.current, {
-        opacity: 0, y: -40, duration: 0.45, ease: "power3.in",
+        opacity: 0,
+        y: -40,
+        duration: 0.45,
+        ease: "power3.in",
         onComplete: () => {
           localStorage.setItem("isAdminLoggedIn", "true");
           setIsLoggedIn(true);
           fetchProducts();
-          fetchLeads();   // ← also fetch leads after manual login
+          fetchLeads(); // ← also fetch leads after manual login
         },
       });
     } else {
       showToast("Invalid credentials", "error");
-      gsap.to(loginRef.current, { x: 8, repeat: 5, yoyo: true, duration: 0.06 });
+      gsap.to(loginRef.current, {
+        x: 8,
+        repeat: 5,
+        yoyo: true,
+        duration: 0.06,
+      });
     }
   };
 
@@ -257,13 +323,17 @@ export default function AdminDashboard() {
   // ── Product actions ───────────────────────────────────────────────────────
   const handleToggleActive = async (id, currentStatus) => {
     const newStatus = !currentStatus;
-    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isActive: newStatus } : p)));
+    setProducts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isActive: newStatus } : p)),
+    );
     try {
       await updateDoc(doc(db, "products", id), { isActive: newStatus });
       showToast(newStatus ? "Product activated" : "Product deactivated");
     } catch (err) {
       console.error("Toggle error:", err);
-      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isActive: currentStatus } : p)));
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, isActive: currentStatus } : p)),
+      );
       showToast("Failed to update status", "error");
     }
   };
@@ -275,17 +345,23 @@ export default function AdminDashboard() {
       ...form,
       features:
         typeof form.features === "string"
-          ? form.features.split(",").map((f) => f.trim()).filter(Boolean)
+          ? form.features
+              .split(",")
+              .map((f) => f.trim())
+              .filter(Boolean)
           : form.features,
     };
     try {
       if (editingId) {
         await updateDoc(doc(db, "products", editingId), payload);
-        setProducts((prev) => prev.map((p) => (p.id === editingId ? { ...p, ...payload } : p)));
+        setProducts((prev) =>
+          prev.map((p) => (p.id === editingId ? { ...p, ...payload } : p)),
+        );
         showToast("Product updated!");
       } else {
         const docRef = await addDoc(collection(db, "products"), {
-          ...payload, createdAt: serverTimestamp(),
+          ...payload,
+          createdAt: serverTimestamp(),
         });
         setProducts((prev) => [{ id: docRef.id, ...payload }, ...prev]);
         showToast("Product published!");
@@ -314,11 +390,15 @@ export default function AdminDashboard() {
   };
 
   const saveCountdown = async () => {
-    if (!countdownEnd) { showToast("Please select a date and time", "error"); return; }
+    if (!countdownEnd) {
+      showToast("Please select a date and time", "error");
+      return;
+    }
     setBtnLoading(true);
     try {
       await setDoc(doc(db, "settings", "countdown"), {
-        endTime: new Date(countdownEnd), updatedAt: serverTimestamp(),
+        endTime: new Date(countdownEnd),
+        updatedAt: serverTimestamp(),
       });
       showToast("Countdown timer updated successfully!");
     } catch (err) {
@@ -334,12 +414,15 @@ export default function AdminDashboard() {
     setToast({ show: true, message, type });
     toastTimerRef.current = setTimeout(
       () => setToast({ show: false, message: "", type: "success" }),
-      3000
+      3000,
     );
   }, []);
 
-  const resetForm   = () => { setForm(emptyForm); setEditingId(null); };
-  const openSidebar  = () => setIsSidebarOpen(true);
+  const resetForm = () => {
+    setForm(emptyForm);
+    setEditingId(null);
+  };
+  const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleEdit = (product) => {
@@ -362,14 +445,15 @@ export default function AdminDashboard() {
     form.originalPrice && form.price
       ? Math.round(
           ((parseFloat(form.originalPrice) - parseFloat(form.price)) /
-            parseFloat(form.originalPrice)) * 100
+            parseFloat(form.originalPrice)) *
+            100,
         )
       : 0;
 
   const filtered = products.filter(
     (p) =>
       p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.subtitle?.toLowerCase().includes(searchQuery.toLowerCase())
+      p.subtitle?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // ── Derived stats ─────────────────────────────────────────────────────────
@@ -378,7 +462,9 @@ export default function AdminDashboard() {
   // ── Login Screen ──────────────────────────────────────────────────────────
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 relative overflow-hidden">
+      <div
+        className={`min-h-screen bg-[#FDFDFD] flex items-center justify-center p-4 relative overflow-hidden ${urbanist.className}`}
+      >
         <div className="absolute inset-0 bg-[linear-gradient(rgba(237,28,36,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(237,28,36,0.03)_1px,transparent_1px)] bg-size-[40px_40px]" />
         <div
           ref={loginRef}
@@ -391,12 +477,28 @@ export default function AdminDashboard() {
             >
               <Lock size={28} />
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-900">Admin Portal</h1>
-            <p className="text-slate-400 mt-1.5 text-sm font-medium">Secure access only</p>
+            <h1 className="text-2xl font-black tracking-tight text-slate-900">
+              Admin Portal
+            </h1>
+            <p className="text-slate-400 mt-1.5 text-sm font-medium">
+              Secure access only
+            </p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
-            <FormInput label="Username" name="username" type="text" placeholder="admin_user" required />
-            <FormInput label="Password" name="password" type="password" placeholder="••••••••" required />
+            <FormInput
+              label="Username"
+              name="username"
+              type="text"
+              placeholder="admin_user"
+              required
+            />
+            <FormInput
+              label="Password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              required
+            />
             <button
               type="submit"
               className="w-full text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-200/50 hover:opacity-90 active:scale-95 transition-all text-sm mt-2"
@@ -412,8 +514,9 @@ export default function AdminDashboard() {
 
   // ── Main Dashboard ────────────────────────────────────────────────────────
   return (
-    <div className={`flex min-h-screen bg-[#F8F8FA] text-slate-900 overflow-x-hidden ${urbanist.className}`}>
-
+    <div
+      className={`flex min-h-screen bg-[#F8F8FA] text-slate-900 overflow-x-hidden ${urbanist.className}`}
+    >
       {/* Backdrop */}
       <div
         ref={backdropRef}
@@ -428,7 +531,11 @@ export default function AdminDashboard() {
         className="fixed inset-y-0 left-0 w-65 bg-white border-r border-slate-100/80 z-50 flex flex-col shadow-xl shadow-slate-200/30"
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
-          <img src="/logo/ctu1.png" alt="Logo" className="h-8 w-auto object-contain" />
+          <img
+            src="/logo/ctu1.png"
+            alt="Logo"
+            className="h-8 w-auto object-contain"
+          />
           <button
             onClick={closeSidebar}
             className="lg:hidden p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
@@ -442,11 +549,41 @@ export default function AdminDashboard() {
           <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.18em] px-3 pb-2 pt-1">
             Menu
           </p>
-          <NavLink icon={<LayoutDashboard size={17} />} label="Dashboard"      active={activeTab === "dashboard"}     onClick={() => navigate("dashboard")} />
-          <NavLink icon={<PlusCircle size={17} />}      label="Add Product"    active={activeTab === "add-product"}   onClick={() => { resetForm(); navigate("add-product"); }} />
-          <NavLink icon={<Package size={17} />}         label="Catalog"        active={activeTab === "all-products"}  count={products.length} onClick={() => navigate("all-products")} />
-          <NavLink icon={<Clock size={17} />}           label="Timer Settings" active={activeTab === "settings"}      onClick={() => navigate("settings")} />
-          <NavLink icon={<Users size={17} />}           label="Leads"          active={activeTab === "customers"}     count={leads.length} onClick={() => navigate("customers")} />
+          <NavLink
+            icon={<LayoutDashboard size={17} />}
+            label="Dashboard"
+            active={activeTab === "dashboard"}
+            onClick={() => navigate("dashboard")}
+          />
+          <NavLink
+            icon={<PlusCircle size={17} />}
+            label="Add Product"
+            active={activeTab === "add-product"}
+            onClick={() => {
+              resetForm();
+              navigate("add-product");
+            }}
+          />
+          <NavLink
+            icon={<Package size={17} />}
+            label="Catalog"
+            active={activeTab === "all-products"}
+            count={products.length}
+            onClick={() => navigate("all-products")}
+          />
+          <NavLink
+            icon={<Clock size={17} />}
+            label="Timer Settings"
+            active={activeTab === "settings"}
+            onClick={() => navigate("settings")}
+          />
+          <NavLink
+            icon={<Users size={17} />}
+            label="Leads"
+            active={activeTab === "customers"}
+            count={leads.length}
+            onClick={() => navigate("customers")}
+          />
         </nav>
 
         <div className="p-4 border-t border-slate-50">
@@ -454,7 +591,10 @@ export default function AdminDashboard() {
             onClick={logout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all group text-sm font-semibold"
           >
-            <LogOut size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            <LogOut
+              size={16}
+              className="group-hover:-translate-x-0.5 transition-transform"
+            />
             Sign Out
           </button>
         </div>
@@ -473,7 +613,10 @@ export default function AdminDashboard() {
               <Menu size={20} />
             </button>
             <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
+                size={15}
+              />
               <input
                 type="text"
                 placeholder="Search products…"
@@ -483,33 +626,24 @@ export default function AdminDashboard() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-2 md:gap-3">
-            <button className="relative p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-              <Bell size={18} />
-              <span
-                className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full border-2 border-white"
-                style={{ background: ACCENT }}
-              />
-            </button>
-            <div className="h-8 w-8 rounded-full overflow-hidden ring-2 ring-red-100 cursor-pointer">
-              <img
-                src="https://ui-avatars.com/api/?name=Admin&background=ED1C24&color=fff&bold=true"
-                alt="Avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
+         
         </header>
 
         {/* Page content */}
-        <div ref={mainContentRef} className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
-
+        <div
+          ref={mainContentRef}
+          className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full"
+        >
           {/* ── Dashboard ── */}
           {activeTab === "dashboard" && (
             <div className="space-y-8">
               <div>
-                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Overview</h1>
-                <p className="text-slate-400 text-sm mt-1 font-medium">Performance at a glance</p>
+                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+                  Overview
+                </h1>
+                <p className="text-slate-400 text-sm mt-1 font-medium">
+                  Performance at a glance
+                </p>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {/* Card 1: Total Products */}
@@ -557,48 +691,103 @@ export default function AdminDashboard() {
                 className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 space-y-5"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <FormInput label="Title *"   value={form.title}    onChange={(e) => setForm({ ...form, title: e.target.value })}    placeholder="Pro Package"    required />
-                  <FormInput label="Subtitle"  value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })} placeholder="Advanced Tier" />
+                  <FormInput
+                    label="Title *"
+                    value={form.title}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
+                    placeholder="Pro Package"
+                    required
+                  />
+                  <FormInput
+                    label="Subtitle"
+                    value={form.subtitle}
+                    onChange={(e) =>
+                      setForm({ ...form, subtitle: e.target.value })
+                    }
+                    placeholder="Advanced Tier"
+                  />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <FormInput label="Price (PKR) *" value={form.price}          onChange={(e) => setForm({ ...form, price: e.target.value })}         placeholder="2999" type="number" required />
+                  <FormInput
+                    label="Price (PKR) *"
+                    value={form.price}
+                    onChange={(e) =>
+                      setForm({ ...form, price: e.target.value })
+                    }
+                    placeholder="2999"
+                    type="number"
+                    required
+                  />
                   <FormInput
                     label={`Original Price${savings > 0 ? ` — ${savings}% savings` : ""}`}
                     value={form.originalPrice}
-                    onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, originalPrice: e.target.value })
+                    }
                     placeholder="4500"
                     type="number"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <FormInput label="Badge" value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} placeholder="Best Seller" />
-                  <FormInput label="Tag"   value={form.tag}   onChange={(e) => setForm({ ...form, tag: e.target.value })}   placeholder="Most Popular" />
+                  <FormInput
+                    label="Badge"
+                    value={form.badge}
+                    onChange={(e) =>
+                      setForm({ ...form, badge: e.target.value })
+                    }
+                    placeholder="Best Seller"
+                  />
+                  <FormInput
+                    label="Tag"
+                    value={form.tag}
+                    onChange={(e) => setForm({ ...form, tag: e.target.value })}
+                    placeholder="Most Popular"
+                  />
                 </div>
-                <FormInput label="Image URL" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." />
+                <FormInput
+                  label="Image URL"
+                  value={form.image}
+                  onChange={(e) => setForm({ ...form, image: e.target.value })}
+                  placeholder="https://..."
+                />
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Description</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
+                    Description
+                  </label>
                   <textarea
                     value={form.description}
-                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, description: e.target.value })
+                    }
                     className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-200 min-h-25 transition-all resize-none"
                     placeholder="Product description…"
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
-                    Features <span className="normal-case font-medium text-slate-300">(comma separated)</span>
+                    Features{" "}
+                    <span className="normal-case font-medium text-slate-300">
+                      (comma separated)
+                    </span>
                   </label>
                   <input
                     value={form.features}
-                    onChange={(e) => setForm({ ...form, features: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, features: e.target.value })
+                    }
                     className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-200 transition-all"
                     placeholder="24/7 Support, Free Updates, Priority Access"
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
                   {editingId && (
-                    <button type="button" onClick={resetForm}
-                      className="flex-1 py-3.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all">
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="flex-1 py-3.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all"
+                    >
                       Cancel
                     </button>
                   )}
@@ -608,7 +797,13 @@ export default function AdminDashboard() {
                     className="flex-1 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-red-100/50 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-60"
                     style={{ background: ACCENT }}
                   >
-                    {btnLoading ? <Loader2 size={16} className="animate-spin" /> : editingId ? "Save Changes" : "Publish Product"}
+                    {btnLoading ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : editingId ? (
+                      "Save Changes"
+                    ) : (
+                      "Publish Product"
+                    )}
                   </button>
                 </div>
               </form>
@@ -620,13 +815,18 @@ export default function AdminDashboard() {
             <div>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-black tracking-tight">Digital Catalog</h1>
+                  <h1 className="text-2xl md:text-3xl font-black tracking-tight">
+                    Digital Catalog
+                  </h1>
                   <p className="text-slate-400 text-sm mt-1 font-medium">
                     {filtered.length} product{filtered.length !== 1 ? "s" : ""}
                   </p>
                 </div>
                 <button
-                  onClick={() => { resetForm(); setActiveTab("add-product"); }}
+                  onClick={() => {
+                    resetForm();
+                    setActiveTab("add-product");
+                  }}
                   className="text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-red-100/40 flex items-center gap-2 shrink-0"
                   style={{ background: ACCENT }}
                 >
@@ -636,7 +836,10 @@ export default function AdminDashboard() {
 
               {/* Mobile search */}
               <div className="relative sm:hidden mb-5">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
+                  size={15}
+                />
                 <input
                   type="text"
                   placeholder="Search products…"
@@ -653,12 +856,22 @@ export default function AdminDashboard() {
               ) : filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-slate-300">
                   <Package size={48} strokeWidth={1} />
-                  <p className="mt-4 font-bold text-slate-400">No products found</p>
+                  <p className="mt-4 font-bold text-slate-400">
+                    No products found
+                  </p>
                 </div>
               ) : (
-                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 ${urbanist.className}`}>
+                <div
+                  className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 ${urbanist.className}`}
+                >
                   {filtered.map((p) => (
-                    <ProductCard key={p.id} product={p} onEdit={handleEdit} onDelete={handleDelete} onToggleActive={handleToggleActive} />
+                    <ProductCard
+                      key={p.id}
+                      product={p}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onToggleActive={handleToggleActive}
+                    />
                   ))}
                 </div>
               )}
@@ -669,11 +882,17 @@ export default function AdminDashboard() {
           {activeTab === "settings" && (
             <div className="max-w-lg mx-auto">
               <div className="mb-8">
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight">Limited Offer Timer</h1>
-                <p className="text-slate-400 text-sm mt-1">Set when the countdown should end on the homepage</p>
+                <h1 className="text-2xl md:text-3xl font-black tracking-tight">
+                  Limited Offer Timer
+                </h1>
+                <p className="text-slate-400 text-sm mt-1">
+                  Set when the countdown should end on the homepage
+                </p>
               </div>
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
-                <label className="block text-sm font-medium text-slate-600 mb-3">Offer Ends At</label>
+                <label className="block text-sm font-medium text-slate-600 mb-3">
+                  Offer Ends At
+                </label>
                 <input
                   type="datetime-local"
                   value={countdownEnd}
@@ -685,10 +904,15 @@ export default function AdminDashboard() {
                   disabled={btnLoading || !countdownEnd}
                   className="mt-8 w-full bg-[#ED1C24] text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                 >
-                  {btnLoading ? <Loader2 size={20} className="animate-spin" /> : "Save & Activate Timer"}
+                  {btnLoading ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    "Save & Activate Timer"
+                  )}
                 </button>
                 <p className="text-center text-xs text-slate-400 mt-6">
-                  The timer will appear live in the hero section and update in real-time.
+                  The timer will appear live in the hero section and update in
+                  real-time.
                 </p>
               </div>
             </div>
@@ -698,7 +922,9 @@ export default function AdminDashboard() {
           {activeTab === "customers" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight">Leads</h1>
+                <h1 className="text-2xl md:text-3xl font-black tracking-tight">
+                  Leads
+                </h1>
                 <p className="text-slate-400 text-sm mt-1 font-medium">
                   {leads.length} lead{leads.length !== 1 ? "s" : ""} collected
                 </p>
@@ -708,7 +934,9 @@ export default function AdminDashboard() {
                 {leads.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-24 text-slate-300">
                     <PhoneCall size={48} strokeWidth={1} />
-                    <p className="mt-4 font-bold text-slate-400">No leads yet</p>
+                    <p className="mt-4 font-bold text-slate-400">
+                      No leads yet
+                    </p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
@@ -736,7 +964,6 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
-
         </div>
       </div>
 
@@ -756,12 +983,21 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
   const features = Array.isArray(p.features)
     ? p.features
     : typeof p.features === "string"
-    ? p.features.split(",").map((f) => f.trim()).filter(Boolean)
-    : [];
+      ? p.features
+          .split(",")
+          .map((f) => f.trim())
+          .filter(Boolean)
+      : [];
 
   const savingsPct =
-    p.originalPrice && p.price && parseFloat(p.originalPrice) > parseFloat(p.price)
-      ? Math.round(((parseFloat(p.originalPrice) - parseFloat(p.price)) / parseFloat(p.originalPrice)) * 100)
+    p.originalPrice &&
+    p.price &&
+    parseFloat(p.originalPrice) > parseFloat(p.price)
+      ? Math.round(
+          ((parseFloat(p.originalPrice) - parseFloat(p.price)) /
+            parseFloat(p.originalPrice)) *
+            100,
+        )
       : 0;
 
   return (
@@ -780,22 +1016,35 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-slate-200">
             <ImageOff size={28} strokeWidth={1.5} />
-            <span className="text-[10px] font-semibold text-slate-300">No image</span>
+            <span className="text-[10px] font-semibold text-slate-300">
+              No image
+            </span>
           </div>
         )}
         {p.badge && (
-          <span className="absolute top-2.5 left-2.5 text-[9px] font-black uppercase tracking-wider text-white px-2 py-1 rounded-lg shadow" style={{ background: ACCENT }}>
+          <span
+            className="absolute top-2.5 left-2.5 text-[9px] font-black uppercase tracking-wider text-white px-2 py-1 rounded-lg shadow"
+            style={{ background: ACCENT }}
+          >
             {p.badge}
           </span>
         )}
-        <span className={`absolute top-2.5 right-2.5 w-2 h-2 rounded-full border-2 border-white shadow ${p.isActive ? "bg-emerald-400" : "bg-slate-300"}`} />
+        <span
+          className={`absolute top-2.5 right-2.5 w-2 h-2 rounded-full border-2 border-white shadow ${p.isActive ? "bg-emerald-400" : "bg-slate-300"}`}
+        />
       </div>
 
       <div className="flex flex-col flex-1 p-4 gap-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <h3 className="text-sm font-black text-slate-900 truncate leading-snug">{p.title || "Untitled"}</h3>
-            {p.subtitle && <p className="text-[11px] text-slate-400 font-medium truncate mt-0.5">{p.subtitle}</p>}
+            <h3 className="text-sm font-black text-slate-900 truncate leading-snug">
+              {p.title || "Untitled"}
+            </h3>
+            {p.subtitle && (
+              <p className="text-[11px] text-slate-400 font-medium truncate mt-0.5">
+                {p.subtitle}
+              </p>
+            )}
           </div>
           {p.tag && (
             <span className="shrink-0 text-[9px] font-black bg-slate-100 text-slate-500 px-2 py-1 rounded-lg uppercase tracking-wide whitespace-nowrap">
@@ -805,25 +1054,37 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
         </div>
 
         <div className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-base font-black text-slate-900">PKR {Number(p.price || 0).toLocaleString()}</span>
-          {p.originalPrice && parseFloat(p.originalPrice) > parseFloat(p.price || 0) && (
-            <span className="text-xs text-slate-300 line-through font-medium">PKR {Number(p.originalPrice).toLocaleString()}</span>
-          )}
+          <span className="text-base font-black text-slate-900">
+            PKR {Number(p.price || 0).toLocaleString()}
+          </span>
+          {p.originalPrice &&
+            parseFloat(p.originalPrice) > parseFloat(p.price || 0) && (
+              <span className="text-xs text-slate-300 line-through font-medium">
+                PKR {Number(p.originalPrice).toLocaleString()}
+              </span>
+            )}
           {savingsPct > 0 && (
-            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">-{savingsPct}%</span>
+            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">
+              -{savingsPct}%
+            </span>
           )}
         </div>
 
         {features.length > 0 && (
           <ul className="space-y-1">
             {features.slice(0, 3).map((feat, i) => (
-              <li key={i} className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium">
+              <li
+                key={i}
+                className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium"
+              >
                 <CheckCircle size={11} className="text-emerald-400 shrink-0" />
                 <span className="truncate">{feat}</span>
               </li>
             ))}
             {features.length > 3 && (
-              <li className="text-[10px] text-slate-300 font-semibold pl-4">+{features.length - 3} more</li>
+              <li className="text-[10px] text-slate-300 font-semibold pl-4">
+                +{features.length - 3} more
+              </li>
             )}
           </ul>
         )}
@@ -834,15 +1095,29 @@ function ProductCard({ product: p, onEdit, onDelete, onToggleActive }) {
           <button
             onClick={() => onToggleActive(p.id, p.isActive)}
             className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wide rounded-lg px-2.5 py-1.5 transition-all ${
-              p.isActive ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100" : "bg-slate-50 text-slate-400 hover:bg-slate-100"
+              p.isActive
+                ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                : "bg-slate-50 text-slate-400 hover:bg-slate-100"
             }`}
           >
             {p.isActive ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
             {p.isActive ? "Live" : "Off"}
           </button>
           <div className="flex items-center gap-1">
-            <button onClick={() => onEdit(p)}      className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all" title="Edit product"><Edit3 size={14} /></button>
-            <button onClick={() => onDelete(p.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"  title="Delete product"><Trash2 size={14} /></button>
+            <button
+              onClick={() => onEdit(p)}
+              className="p-2 text-slate-300 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all"
+              title="Edit product"
+            >
+              <Edit3 size={14} />
+            </button>
+            <button
+              onClick={() => onDelete(p.id)}
+              className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+              title="Delete product"
+            >
+              <Trash2 size={14} />
+            </button>
           </div>
         </div>
       </div>
@@ -907,14 +1182,26 @@ function NavLink({ icon, label, active, count, onClick }) {
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 group ${
-        active ? "text-white shadow-md shadow-red-200/40" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+        active
+          ? "text-white shadow-md shadow-red-200/40"
+          : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
       }`}
       style={active ? { background: ACCENT } : {}}
     >
-      <span className={active ? "text-white" : "text-slate-400 group-hover:text-slate-600 transition-colors"}>{icon}</span>
+      <span
+        className={
+          active
+            ? "text-white"
+            : "text-slate-400 group-hover:text-slate-600 transition-colors"
+        }
+      >
+        {icon}
+      </span>
       <span className="flex-1 text-left">{label}</span>
       {count !== undefined && !active && (
-        <span className="text-[9px] font-black bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded-md">{count}</span>
+        <span className="text-[9px] font-black bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded-md">
+          {count}
+        </span>
       )}
       {active && <ChevronRight size={14} className="text-white/60" />}
     </button>
@@ -923,13 +1210,24 @@ function NavLink({ icon, label, active, count, onClick }) {
 
 function StatCard({ icon, title, value, trend, color, className = "" }) {
   return (
-    <div className={`bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow ${className}`}>
+    <div
+      className={`bg-white p-5 md:p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow ${className}`}
+    >
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{title}</p>
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${color}15`, color }}>{icon}</div>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          {title}
+        </p>
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center"
+          style={{ background: `${color}15`, color }}
+        >
+          {icon}
+        </div>
       </div>
       <div className="flex items-end justify-between">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{value}</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+          {value}
+        </h2>
         <span className="text-[10px] font-black text-slate-500 bg-slate-50 px-2 py-1 rounded-lg mb-0.5 max-w-25 text-right leading-tight">
           {trend}
         </span>
@@ -959,7 +1257,11 @@ function Toast({ toast }) {
       className={`fixed bottom-5 right-5 z-9999 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-white text-sm font-bold animate-in slide-in-from-right-4 duration-300 ${toast.type === "error" ? "" : "bg-slate-900"}`}
       style={toast.type === "error" ? { background: ACCENT } : {}}
     >
-      {toast.type === "error" ? <AlertCircle size={17} /> : <CheckCircle size={17} className="text-green-400" />}
+      {toast.type === "error" ? (
+        <AlertCircle size={17} />
+      ) : (
+        <CheckCircle size={17} className="text-green-400" />
+      )}
       {toast.message}
     </div>
   );
