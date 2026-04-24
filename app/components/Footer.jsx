@@ -19,10 +19,26 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { icon: Instagram, label: "Instagram", href: "#" },
-  { icon: Facebook, label: "Facebook", href: "#" },
-  { icon: Youtube, label: "YouTube", href: "#" },
-  { icon: Music2, label: "TikTok", href: "#" },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/thecreatortools/",
+  },
+  {
+    icon: Facebook,
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61578364510349",
+  },
+  {
+    icon: Youtube,
+    label: "YouTube",
+    href: "https://youtube.com/@creatortoolspro?si=teNcQOiERZN99fZO",
+  },
+  {
+    icon: Music2,
+    label: "TikTok",
+    href: "https://www.tiktok.com/@the.creator.tools?_r=1&_t=ZS-95oRmoJA43e",
+  },
 ];
 
 export default function Footer() {
@@ -52,6 +68,8 @@ export default function Footer() {
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="w-9 h-9 rounded-xl bg-gray-800 hover:bg-[#ED1C24] flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5"
                 >
