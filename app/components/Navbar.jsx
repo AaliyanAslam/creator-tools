@@ -77,6 +77,7 @@ const MARQUEE_TEXT =
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Pricing & Plans", href: "#products" },
+  { label: "Reviews", href: "#reviews" },
   { label: "Contact Us", href: "tel:+923193533420" },
 ];
 

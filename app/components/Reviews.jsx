@@ -68,7 +68,7 @@ const Reviews = () => {
   };
 
   return (
-    <section className="relative py-8 sm:py-12 md:py-14 lg:py-16 bg-white overflow-hidden">
+    <section id="reviews" className="relative py-8 sm:py-12 md:py-14 lg:py-16 bg-white overflow-hidden">
       {/* Background Decorative Element */}
       <div
         className="absolute top-0 right-0 w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 pointer-events-none -z-10"
