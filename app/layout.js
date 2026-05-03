@@ -28,7 +28,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className="min-h-full flex flex-col">
-        <ClientWrapper>{children}</ClientWrapper>
+        {/* <ClientWrapper> */}
+          
+          {children}
+
+
+        {/* </ClientWrapper> */}
       </body>
     </html>
   );
