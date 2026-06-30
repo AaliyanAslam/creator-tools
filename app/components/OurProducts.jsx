@@ -78,7 +78,7 @@ export default function OurProducts() {
 
                   {/* ── IMAGE AREA ── */}
                   <div
-                    className={`relative flex items-center justify-center border-b border-gray-100 ${
+                    className={`relative w-full border-b border-gray-100 overflow-hidden ${
                       p.highlight
                         ? "bg-linear-to-br from-red-50/40 to-white"
                         : "bg-gray-50/60"
@@ -103,11 +103,11 @@ export default function OurProducts() {
                     </div>
 
                     {/* Image */}
-                    <div className="h-28 sm:h-42 w-full overflow-hidden">
+                    <div className="relative w-full aspect-video sm:aspect-[4/3]">
                       <img
                         src={p.image}
                         alt={p.title}
-                        className="w-full h-full object-cover transition-transform duration-300 sm:group-hover:scale-105"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 sm:group-hover:scale-105"
                         onError={(e) => {
                           e.target.src =
                             "https://via.placeholder.com/400x300?text=Product+Image";
