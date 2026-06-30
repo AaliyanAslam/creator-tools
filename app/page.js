@@ -17,16 +17,16 @@ export default function page() {
   return (
     <>
       <div className={`${urbanist.className}`}>
-        {/* <Navbar />
+        <Navbar />
         <Hero />
         <Reviews/>
         <OurProducts />
         <LearnNEarn />
         <CTA />
-        <Footer /> */}
+        <Footer />
       </div>
 
-      <div
+      {/* <div
         className={`${urbanist.className} min-h-screen flex items-center justify-center bg-black`}
       >
         <div className="text-center px-4">
@@ -37,7 +37,7 @@ export default function page() {
             Rs. 20,000 remaining
           </p>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
